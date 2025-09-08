@@ -1,15 +1,15 @@
 /* Sidebar styles */
 .sidebar {
     position: fixed;
-    top: 0;
+    top: 60px; /* Below the header */
     left: 0;
     width: 200px;
-    height: 100vh;
+    height: calc(100vh - 60px); /* Adjust for header height */
     background: #222;
     color: #fff;
-    padding-top: 60px; /* adjust if you have a header */
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    z-index: 1000;
+    z-index: 800;
+    overflow-y: auto;
 }
 .sidebar nav ul {
     list-style: none;
@@ -33,7 +33,7 @@
 /* Main content layout with sidebar */
 main {
     margin-left: 200px;
-    padding: 40px 20px 20px 20px;
+    padding: 100px 20px 20px 20px; /* Increased top padding for header */
     min-height: 100vh;
     background: #f9f9f9;
 }
@@ -44,11 +44,250 @@ main {
         height: auto;
         position: relative;
         box-shadow: none;
-        padding-top: 0;
+        display: none;
     }
     main {
         margin-left: 0;
-        padding: 20px 10px;
+        padding: 80px 10px 10px 10px; /* Adjusted for mobile */
     }
 }
 
+/* Side navigation styles */
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.open-nav-btn {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #111;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    position: fixed;
+    top: 70px; /* Below header */
+    left: 20px;
+    z-index: 999;
+    display: none;
+}
+
+/* Main content area */
+#main {
+    transition: margin-left .5s;
+    padding: 20px;
+}
+
+/* When sidebar is open, shift main content */
+.sidenav-open #main {
+    margin-left: 250px;
+}
+
+/* Responsive adjustments */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+
+@media (max-width: 700px) {
+    .open-nav-btn {
+        display: block;
+    }
+    .sidenav-open #main {
+        margin-left: 0;
+    }
+}
+
+/* Header styles */
+.main-header {
+    background-color: #333;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 900;
+    padding: 0 2rem;
+    height: 60px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.nav-brand a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.logo-placeholder {
+    color: white;
+    font-weight: bold;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu li {
+    margin: 0 15px;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+    color: #ddd;
+}
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.nav-toggle span {
+    width: 25px;
+    height: 3px;
+    background: white;
+    margin: 3px 0;
+    transition: 0.3s;
+}
+
+/* Mobile navigation */
+@media (max-width: 768px) {
+    .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 60px;
+        flex-direction: column;
+        background-color: #333;
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 0 10px 27px rgba(0,0,0,0.05);
+        padding: 20px 0;
+    }
+
+    .nav-menu.active {
+        left: 0;
+    }
+
+    .nav-menu li {
+        margin: 15px 0;
+    }
+
+    .nav-toggle {
+        display: flex;
+    }
+}
+
+/* Page title styles */
+.page-title {
+    margin-top: 0;
+    padding-top: 20px;
+    color: #2c3e50;
+    font-size: 2.5rem;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+/* Loading animation */
+.loading {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+/* AfterTimeFault specific styles */
+.data-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.status-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.status-card {
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    color: white;
+}
+
+.status-card.operational {
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+}
+
+.status-card.warning {
+    background: linear-gradient(135deg, #FF9800, #F57C00);
+}
+
+.status-card.critical {
+    background: linear-gradient(135deg, #F44336, #D32F2F);
+}
+
+.status-value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0.5rem 0 0 0;
+}
+
+/* Animation for status cards */
+.status-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.status-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}

@@ -23,4 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Initialize sidebar (if needed)
+    console.log("Website functionality loaded");
 });

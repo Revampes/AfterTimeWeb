@@ -5,27 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AfterTimeFault - Website Name</title>
     <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/home.css">
+    <link rel="stylesheet" href="assets/css/components.css">
 </head>
 <body>
-<!--#include virtual="components/header.html" -->
-<!--#include virtual="components/sidebar.html" -->
-<main>
-    <h1>AfterTimeFault</h1>
-    <section>
-        <p>This is the AfterTimeFault page.</p>
-    </section>
-</main>
-<!--#include virtual="components/footer.html" -->
-<script src="assets/js/main.js"></script>
-</body>
-</html>
-<aside class="sidebar">
+<!-- Header -->
+<header class="main-header">
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="index.html">
+                <span class="logo-placeholder">Logo</span>
+            </a>
+        </div>
+
+        <ul class="nav-menu">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="blog/index.html">Blog</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+
+        <div class="nav-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+</header>
+
+<!-- Sidebar components -->
+<div class="sidebar">
     <nav>
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="https://github.com/Revampes/AfterTime_Fault/releases/tag/v2.0">AfterTimeFault</a></li> <!-- Updated link (AfterTimeFault releases page) -->
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#" class="active">AfterTimeFault</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Portfolio</a></li>
+            <li><a href="#">Contact</a></li>
         </ul>
     </nav>
-</aside>
+</div>
 
+<!-- Side navigation for mobile -->
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="index.html">Home</a>
+    <a href="#">Dashboard</a>
+    <a href="#" class="active">AfterTimeFault</a>
+    <a href="#">Services</a>
+    <a href="#">Portfolio</a>
+    <a href="#">Contact</a>
+</div>
+
+<span class="open-nav-btn" onclick="openNav()">☰ Menu</span>
+
+<main id="main">
+    <h1>AfterTimeFault Mod</h1>
+
+    <section class="hero" style="background: linear-gradient(135deg, #4CAF50, #2E7D32);">
+        <h2>Looking for SkyBlock Mod?</h2>
+        <p>Get Rat All of You</p>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <h3>Creator's Github</h3>
+            <a href="https://github.com/Revampes">AfterTime's Github</a>
+        </div>
+        <div class="feature-card">
+            <h3>Feature List</h3>
+            <p>Scroll down for more informations.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Download</h3>
+            <a href="https://github.com/Revampes/AfterTime_Fault/releases/">AfterTimeFault Release</a>
+        </div>
+    </section>
+
+    <div class="data-section">
+        <h2>Category [Kuudra]</h2>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2023 Your Website Name. All rights reserved.</p>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/sidebar.js"></script>
+</body>
+</html>

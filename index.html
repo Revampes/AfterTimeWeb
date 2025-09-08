@@ -5,29 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Website Name</title>
     <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/home.css">
+    <link rel="stylesheet" href="assets/css/components.css">
 </head>
 <body>
-<!--#include virtual="components/header.html" -->
-<!--#include virtual="components/sidebar.html" -->
-<main>
-    <h1>AfterTime's Home</h1>
+<!-- Header -->
+<header class="main-header">
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="index.html">
+                <span class="logo-placeholder">Logo</span>
+            </a>
+        </div>
+
+        <ul class="nav-menu">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="blog/index.html">Blog</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+
+        <div class="nav-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+</header>
+
+<!-- Sidebar components -->
+<div class="sidebar">
+    <nav>
+        <ul>
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="aftertimefault.html">AfterTimeFault</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Portfolio</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+</div>
+
+<!-- Side navigation for mobile -->
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="index.html">Home</a>
+    <a href="#">Dashboard</a>
+    <a href="aftertimefault.html">AfterTimeFault</a>
+    <a href="#">Services</a>
+    <a href="#">Portfolio</a>
+    <a href="#">Contact</a>
+</div>
+
+<span class="open-nav-btn" onclick="openNav()">☰ Menu</span>
+
+<main id="main">
+    <h1 class="page-title">AfterTime's Home</h1>
+
     <section class="hero">
         <h2>Welcome to Our Website</h2>
-        <p>Your compelling hero content here</p>
+        <p>Your compelling hero content here. Discover amazing features and services.</p>
     </section>
 
     <section class="features">
-        <!-- Feature cards -->
+        <div class="feature-card">
+            <h3>Feature One</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Feature Two</h3>
+            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Feature Three</h3>
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+        </div>
     </section>
 
     <section class="cta">
-        <!-- Call to action -->
+        <h2>Ready to Get Started?</h2>
+        <p>Join thousands of satisfied customers today.</p>
+        <button>Sign Up Now</button>
     </section>
 </main>
 
-<!--#include virtual="components/footer.html" -->
+<footer>
+    <p>&copy; 2023 Your Website Name. All rights reserved.</p>
+</footer>
+
 <script src="assets/js/main.js"></script>
-<script src="assets/js/pages/home.js"></script>
+<script src="assets/js/sidebar.js"></script>
 </body>
 </html>
