@@ -1,0 +1,54 @@
+/* Sidebar styles */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 100vh;
+    background: #222;
+    color: #fff;
+    padding-top: 60px; /* adjust if you have a header */
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.sidebar nav ul li {
+    margin: 0;
+}
+.sidebar nav ul li a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 15px 20px;
+    transition: background 0.2s;
+}
+.sidebar nav ul li a:hover, .sidebar nav ul li a.active {
+    background: #444;
+}
+
+/* Main content layout with sidebar */
+main {
+    margin-left: 200px;
+    padding: 40px 20px 20px 20px;
+    min-height: 100vh;
+    background: #f9f9f9;
+}
+
+@media (max-width: 700px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        box-shadow: none;
+        padding-top: 0;
+    }
+    main {
+        margin-left: 0;
+        padding: 20px 10px;
+    }
+}
+
