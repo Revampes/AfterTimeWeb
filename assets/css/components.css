@@ -1,34 +1,4 @@
-/* Sidebar styles */
-.sidebar {
-    position: fixed;
-    top: 60px; /* Below the header */
-    left: 0;
-    width: 200px;
-    height: calc(100vh - 60px); /* Adjust for header height */
-    background: #222;
-    color: #fff;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    z-index: 800;
-    overflow-y: auto;
-}
-.sidebar nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-.sidebar nav ul li {
-    margin: 0;
-}
-.sidebar nav ul li a {
-    display: block;
-    color: #fff;
-    text-decoration: none;
-    padding: 15px 20px;
-    transition: background 0.2s;
-}
-.sidebar nav ul li a:hover, .sidebar nav ul li a.active {
-    background: #444;
-}
+
 
 /* Main content layout with sidebar */
 main {
@@ -239,55 +209,4 @@ main {
     padding: 2rem;
     font-size: 1.2rem;
     color: #666;
-}
-
-/* AfterTimeFault specific styles */
-.data-section {
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    margin-bottom: 2rem;
-}
-
-.status-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-}
-
-.status-card {
-    padding: 1.5rem;
-    border-radius: 8px;
-    text-align: center;
-    color: white;
-}
-
-.status-card.operational {
-    background: linear-gradient(135deg, #4CAF50, #2E7D32);
-}
-
-.status-card.warning {
-    background: linear-gradient(135deg, #FF9800, #F57C00);
-}
-
-.status-card.critical {
-    background: linear-gradient(135deg, #F44336, #D32F2F);
-}
-
-.status-value {
-    font-size: 2rem;
-    font-weight: bold;
-    margin: 0.5rem 0 0 0;
-}
-
-/* Animation for status cards */
-.status-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.status-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
