@@ -176,6 +176,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+// Smooth scrolling for anchor links
+document.querySelectorAll('a.scroll-link').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+
+        if (targetElement) {
+            targetElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
 // Sidebar helpers (keep these global for other pages)
 function openNav() { document.getElementById('mySidenav').style.width = '250px'; }
 function closeNav() { document.getElementById('mySidenav').style.width = '0'; }

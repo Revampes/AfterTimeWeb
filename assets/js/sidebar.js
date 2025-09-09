@@ -101,7 +101,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.querySelectorAll('.sidebar a, .sidenav a').forEach(link => {
         const linkPage = link.getAttribute('href');
-        if (linkPage === currentPage || (currentPage === '' && linkPage === 'index.html')) {
+        // Normalize values for comparison
+        const normalizedCurrent = currentPage || 'index.html';
+        const fullHref = link.href || '';
+
+        const matches = (
+            linkPage === normalizedCurrent ||
+            fullHref.endsWith('/' + normalizedCurrent) ||
+            window.location.href.endsWith(linkPage) ||
+            (normalizedCurrent === 'index.html' && (linkPage === 'index.html' || linkPage === './' || linkPage === '/'))
+        );
+
+        if (matches) {
             link.classList.add('active');
         } else {
             link.classList.remove('active');

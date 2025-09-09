@@ -299,6 +299,106 @@
   margin-bottom: 16px;
 }
 
+/* Mod description card */
+.mod-description-container {
+  max-width: 960px;
+  margin: 1rem auto 2rem auto;
+  padding: 0 1rem;
+}
+
+.mod-card {
+  background: #ffffff;
+  color: #222;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+
+.mod-card-header {
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.mod-name {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 700;
+}
+
+.mod-version {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-left: 0.6rem;
+  color: #6c5ce7;
+}
+
+.mod-meta {
+  margin-top: 6px;
+  display: flex;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: #6b6f76;
+}
+
+.mod-card-body {
+  padding: 16px 20px 20px 20px;
+}
+
+.mod-summary {
+  margin: 0 0 12px 0;
+  color: #3b3f44;
+  line-height: 1.5;
+}
+
+.mod-features {
+  margin: 8px 0 0 20px;
+  color: #3b3f44;
+}
+
+.mod-features li {
+  margin-bottom: 6px;
+}
+
+/* make sure the card looks good in dark/neon theme too */
+body.theme-neon .mod-card {
+  /* use neon panel background and readable text */
+  background: var(--panel-bg);
+  color: var(--text-primary);
+  position: relative;
+  border-radius: 12px;
+  box-shadow: 0 8px 34px rgba(98,82,196,0.12), inset 0 0 30px rgba(167,119,227,0.06);
+  border: 1px solid rgba(255,255,255,0.04);
+  z-index: 1;
+}
+
+body.theme-neon .mod-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 0;
+  box-shadow: 0 0 28px rgba(110,142,251,0.14), 0 0 60px rgba(167,119,227,0.06);
+}
+
+body.theme-neon .mod-card > * { position: relative; z-index: 2; }
+
+body.theme-neon .mod-card-header {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  padding: 18px 20px;
+}
+
+body.theme-neon .mod-name { color: #ffffff; }
+body.theme-neon .mod-version { color: var(--neon-accent-2); }
+body.theme-neon .mod-meta { color: var(--text-dim); }
+body.theme-neon .mod-summary,
+body.theme-neon .mod-features { color: var(--text-primary); }
+
+@media (max-width: 720px) {
+  .mod-name { font-size: 1.25rem; }
+  .mod-card-header, .mod-card_body { padding-left: 14px; padding-right: 14px; }
+}
+
 /* Responsive: stack columns on small screens */
 @media (max-width: 800px) {
   .categories-layout {
@@ -459,28 +559,3 @@ body.theme-neon.aftertimefault-page .hero-inline.tall { --hero-inline-height:460
 body.theme-neon.aftertimefault-page .hero-inline.cover::before { background-size: cover; }
 body.theme-neon.aftertimefault-page .hero-inline.less-blur::before { filter: blur(4px) brightness(1.05); }
 body.theme-neon.aftertimefault-page .hero-inline.no-overlay::after { background: transparent; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
