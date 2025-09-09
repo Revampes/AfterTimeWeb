@@ -117,24 +117,43 @@ main {
     height: 100%;
 }
 
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-brand a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+}
+
 .nav-brand a {
     color: white;
     text-decoration: none;
     font-weight: bold;
 }
-    font-size: 1.5rem;
-    gap: 8px;
-
-.logo-placeholder {
-    color: white;
-    font-weight: bold;
+    height: 44px !important;      /* fixed height to prevent oversized logo */
+    max-height: 44px !important;  /* enforce cap */
+    width: auto !important;
+    max-width: 180px !important;   /* hard cap on width */
+    height: 40px;       /* constrained to header height */
+    max-height: 48px;
+    width: auto;
+    max-width: 140px;   /* avoid overly wide logo */
+    display: inline-block;
+    object-fit: cover;
+    border-radius: 6px;
 }
 
-.nav-menu {
-    display: flex;
-    list-style: none;
-    height: 22px; /* reduced logo height for a smaller header appearance */
-    padding: 0;
+@media (max-width: 1024px) {
+    .site-logo { height: 36px; max-width: 120px; }
+}
+@media (max-width: 700px) {
+    .site-logo { height: 30px; max-width: 110px; }
 }
 
 .nav-menu li {

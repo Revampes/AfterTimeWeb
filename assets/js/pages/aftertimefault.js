@@ -3,21 +3,60 @@ document.addEventListener('DOMContentLoaded', () => {
     kuudra: {
       title: 'Kuudra',
       modules: [
-        { id: 'auto-refill-pearls', title: 'Auto Refill Pearls', content: `<p>Automatically refills your ender pearls from your sack. Combo with pearl cancel.</p>` },
-        { id: 'dynamic-pearl-calculator', title: 'Dynamic Pearl Calculator', content: `<p>Highlight the spot/angle that you should aim at.</p>` }
+        { id: 'auto-refill-pearls', title: 'Auto Refill Pearls', content: `<p>Automatically refills your ender pearls from your sack. Combo with pearl cancel.</p>
+             <div class="notice-label">
+               <p>Warning: Use at your own risk!</p>
+             </div>
+        `},
+        { id: 'dynamic-pearl-calculator', title: 'Dynamic Pearl Calculator', content: `<p>Highlight the spot/angle that you should aim at.</p>` },
+        { id: 'crate-beam', title: 'Crate Beam Highlight', content: `<p>Highlight supplies/crates with beacon beam.</p>`},
+        { id: 'crate-hitbox', title: 'Crate Hitbox', content: `<p>Highlight supplies/crates with ESP hitbox.</p>`},
+        { id: 'pearl-cancel', title: 'Pearl Cancel', content: `<p>Blocked right click action so that you can throw ender pearl towards ground.</p>
+             <div class="notice-label">
+                <p>Warning: Use at your own risk!</p>
+             </div>
+        `},
+        { id: 'track-arrow', title: 'Twilight/Toxic Arrow Tracker', content: `<p>Track the number of twilight and toxic arrow posion in player's inventory`},
+        { id: 'hide-useless-perk', title: 'Hide Useless Perk', content: `<p>Hide and block user from clicking useless perk</p>
+             <div class="notice-label">
+                <p>Notice: Currently not working in progress!</p>
+             </div>
+        `}
       ]
     },
     dungeon: {
       title: 'Dungeon',
       modules: [
         { id: 'leap-announce', title: 'Leap Announce', content: `<p>Announce in party chat that you have leaped to someone with in-game name.</p>` },
-        { id: 'mob-highlighter', title: 'Mob Highlighter', content: `<p>Highlights important mobs and rare spawns to make them easier to find in dungeons.</p>` }
+        { id: 'mob-highlighter', title: 'Mob Highlight', content: `<p>Highlights starred mobs with ESP Hitbox through wall.</p>` },
+        { id: 'invincible-timer', title: 'Invincible timer', content: `<p>Create a visible ui for player to know the exact time of bonzo/spirit/phoenix cooldown</p>`},
+        { id: 'ghost-block', title: 'Floor7 Pre Ghost Block', content: `<p>Automatically create ghost block in f7 boss room for better gaming experience</p>
+            <div class="notice-label">
+                <p>Warning: Use at your own risk!</p>
+                <p>This feature will be removed once DungeonBreaker is released.</p>
+            </div>
+        `},
+        { id: 'key-highlight', title: 'Wither/Blood Key Highlight', content: `<p>Highlights wither and blood key with ESP hitbox through wall.</p>`},
+        { id: 'secret-click-highlight', title: 'Secret Click Highlight', content: `<p>Highlights the clicked secret with colored hitbox in dungeon.</p><p>e.g. secret chest, lever and button</p>`},
+        { id: 'custom-terminals-ui', title: 'Custom Terminals UI', content: `<p>Provide a large and clean terminals GUI</p>`},
+        { id: 'watcher-timer', title: 'Watcher Timer', content: `<p>Notice when mage should clear blood mobs.</p>`}
       ]
     },
     fishing: {
       title: 'Fishing',
       modules: [
-        { id: 'auto-fish', title: 'Auto Fish', content: `<p>Automatically reels and casts your rod.</p><ul><li>AutoShift</li><li>SlugMode</li></ul>` }
+        { id: 'auto-fish', title: 'Auto Fish', content: `<p>Automatically reels and casts your rod.</p>
+        <br>
+        <p>You can toggle these helper functions</p>
+        <div class="image-wrapper">
+            <img src="assets/images/photos/Fishing/autofishsettingone.png" alt="AutoFish setting">
+        </div>
+        <br>
+        <p>You are able to adjust:</p>
+        <div class="image-wrapper">
+            <img src="assets/images/photos/Fishing/autofishsettingtwo.png" alt="AutoFish setting">
+        </div>
+        `}
       ]
     },
     render: {
@@ -37,6 +76,12 @@ document.addEventListener('DOMContentLoaded', () => {
               </a>
             </div>
             <div class="video-caption">Click the thumbnail to open the video on YouTube</div>` }
+      ]
+    },
+    performance: {
+      title: 'Performance',
+      modules: [
+        { id: 'hide-useless-message', title: 'Hide Useless Message', content: `<p>Hide useless message in game for cleaner chatbox.</p>`}
       ]
     }
   };
