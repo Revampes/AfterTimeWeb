@@ -237,3 +237,79 @@
   height: auto;
   border-radius: 8px;
 }
+
+/* Layout for categories */
+.categories-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  margin: 2rem 1rem;
+}
+
+.modules-column {
+  width: 260px;
+  min-width: 200px;
+}
+
+.details-column {
+  flex: 1;
+  min-width: 320px;
+}
+
+.modules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.module-button {
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid #e6e9ed;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.module-button:hover {
+  transform: translateX(6px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.module-button.active {
+  background: #6c5ce7;
+  color: #fff;
+  border-color: rgba(108,92,231,0.9);
+}
+
+.module-detail {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  padding: 18px;
+}
+
+.module-detail #module-content {
+  margin-top: 12px;
+}
+
+/* Ensure category-tabs stays above module detail */
+.category-tabs {
+  margin-bottom: 16px;
+}
+
+/* Responsive: stack columns on small screens */
+@media (max-width: 800px) {
+  .categories-layout {
+    flex-direction: column;
+  }
+
+  .modules-column {
+    width: 100%;
+  }
+
+  .details-column {
+    width: 100%;
+  }
+}

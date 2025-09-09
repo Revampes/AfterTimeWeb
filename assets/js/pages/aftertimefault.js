@@ -1,213 +1,134 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const dots = document.getElementById('dots');
-  const moreText = document.getElementById('more-text');
-  const toggleButton = document.getElementById('toggle-button');
-
-  if (toggleButton) {
-    toggleButton.addEventListener('click', function() {
-      if (moreText.style.display === 'none') {
-        dots.style.display = 'none';
-        moreText.style.display = 'inline'; // Or 'block' depending on content
-        toggleButton.textContent = 'Read less';
-      } else {
-        dots.style.display = 'inline';
-        moreText.style.display = 'none';
-        toggleButton.textContent = 'Read more';
-      }
-    });
-  }
-
-  // Expandable box functionality
-  document.querySelectorAll('.box-header').forEach(header => {
-    header.addEventListener('click', function() {
-      const box = this.closest('.expandable-box');
-      box.classList.toggle('expanded');
-    });
-  });
-
-  // Category data - this would be your content for each category
+  // Category + modules data
   const categories = {
     kuudra: {
       title: "Kuudra",
-      content: `
-        <h3>Kuudra Modules</h3>
-        <p>Kuudra is a powerful boss entity found in the Crimson Isle. Defeating Kuudra requires teamwork and strategy, offering valuable rewards for successful completion.</p>
-        
-        <h3>Kuudra Tiers</h3>
-        <ul>
-          <li><strong>Basic:</strong> Entry-level difficulty, requires minimal gear</li>
-          <li><strong>Hot:</strong> Increased difficulty with additional mechanics</li>
-          <li><strong>Burning:</strong> Challenging difficulty with unique rewards</li>
-          <li><strong>Fiery:</strong> Expert-level difficulty requiring coordination</li>
-          <li><strong>Infernal:</strong> The ultimate challenge for seasoned players</li>
-        </ul>
-        
-        <h3>Rewards</h3>
-        <p>Successful completion of Kuudra battles grants various rewards including Crimson Armor pieces, attributes, and other valuable items that enhance your gameplay experience.</p>
-        
-        <p>Each higher tier offers better rewards but requires more skill, coordination, and better equipment to complete.</p>
-      `
+      modules: [
+        {
+          id: 'auto-refill-pearls',
+          title: 'Auto Refill Pearls',
+          content: `<p>Automatically refills your ender pearls from your inventory into the hotbar when you run out. Useful during boss fights to avoid being stranded without pearls.</p>`
+        },
+        {
+          id: 'dynamic-pearl-calculator',
+          title: 'Dynamic Pearl Calculator',
+          content: `<p>Shows an on-screen estimate of pearl usage and cooldowns to help plan engagements and retreats.</p>`
+        }
+      ]
     },
     dungeon: {
       title: "Dungeon",
-      content: `
-        <h3>Dungeon Modules</h3>
-        <p>Dungeons are challenging instanced areas with multiple floors, each with increasing difficulty. Team up with other players to defeat monsters, solve puzzles, and defeat the boss at the end.</p>
-        
-        <h3>Dungeon Floors</h3>
-        <ul>
-          <li><strong>Entrance:</strong> Introduction to dungeon mechanics</li>
-          <li><strong>Floor 1:</strong> The Catacombs - Beginner level</li>
-          <li><strong>Floor 2:</strong> The Catacombs - Intermediate level</li>
-          <li><strong>Floor 3:</strong> The Catacombs - Advanced level</li>
-          <li><strong>Floor 4:</strong> The Catacombs - Expert level</li>
-          <li><strong>Floor 5:</strong> The Catacombs - Master level</li>
-          <li><strong>Floor 6:</strong> The Catacombs - Nightmare level</li>
-          <li><strong>Floor 7:</strong> The Catacombs - Ultimate challenge</li>
-        </ul>
-        
-        <h3>Dungeon Classes</h3>
-        <p>Choose from different classes, each with unique abilities and playstyles:</p>
-        <ul>
-          <li><strong>Tank:</strong> High health and defense, protects teammates</li>
-          <li><strong>Healer:</strong> Restores health and provides support</li>
-          <li><strong>Mage:</strong> Powerful ranged magic attacks</li>
-          <li><strong>Berserker:</strong> High melee damage output</li>
-          <li><strong>Archer:</strong> Long-range physical attacks</li>
-        </ul>
-      `
+      modules: [
+        {
+          id: 'auto-pot',
+          title: 'Auto Pot',
+          content: `<p>Automatically drinks potions when your health or other conditions are met.</p>`
+        },
+        {
+          id: 'mob-highlighter',
+          title: 'Mob Highlighter',
+          content: `<p>Highlights important mobs and rare spawns to make them easier to find in dungeons.</p>`
+        }
+      ]
     },
     fishing: {
       title: "Fishing",
-      content: `
-        <h3>Fishing Modules</h3>
-        <p>Fishing is a relaxing activity that can yield various rewards, from common fish to rare sea creatures. Different locations and fishing rods affect what you can catch.</p>
-        
-        <h3>Fishing Locations</h3>
-        <ul>
-          <li><strong>Pond:</strong> Basic fishing spot with common fish</li>
-          <li><strong>Lake:</strong> Larger variety of fish</li>
-          <li><strong>Ocean:</strong> Chance to catch rare sea creatures</li>
-          <li><strong>Lava:</strong> Specialized fishing for unique rewards</li>
-          <li><strong>Winter:</strong> Ice fishing for cold-weather species</li>
-        </ul>
-        
-        <h3>Fishing Rods</h3>
-        <p>Different rods have different capabilities:</p>
-        <ul>
-          <li><strong>Starter Rod:</strong> Basic fishing capabilities</li>
-          <li><strong>Advanced Rod:</strong> Increased chance for rare catches</li>
-          <li><strong>Expert Rod:</strong> Special abilities and bonuses</li>
-          <li><strong>Legendary Rod:</strong> Highest chance for legendary catches</li>
-        </ul>
-        
-        <h3>Sea Creatures</h3>
-        <p>Rare catches that spawn enemies when fished up:</p>
-        <ul>
-          <li><strong>Common:</strong> Easy to defeat, common rewards</li>
-          <li><strong>Uncommon:</strong> Moderate difficulty, better rewards</li>
-          <li><strong>Rare:</strong> Challenging, valuable rewards</li>
-          <li><strong>Legendary:</strong> Very difficult, exclusive rewards</li>
-        </ul>
-      `
+      modules: [
+        {
+          id: 'auto-fish',
+          title: 'Auto Fish',
+          content: `<p>Automatically reels and casts to speed up fishing sessions.</p>`
+        }
+      ]
     },
     render: {
       title: "Render",
-      content: `
-        <h3>Render Modules</h3>
-        <p>Render modules enhance the visual experience of the game, providing better graphics, visual effects, and customization options.</p>
-        
-        <h3>Visual Enhancements</h3>
-        <ul>
-          <li><strong>Shader Support:</strong> Enhanced lighting and shadows</li>
-          <li><strong>Texture Improvements:</strong> Higher resolution textures</li>
-          <li><strong>Particle Effects:</strong> Enhanced visual effects</li>
-          <li><strong>UI Customization:</strong> Customizable user interface</li>
-          <li><strong>Color Adjustments:</strong> Brightness, contrast, and saturation controls</li>
-        </ul>
-        
-        <h3>Performance Options</h3>
-        <p>Balance between visual quality and performance:</p>
-        <ul>
-          <li><strong>Low:</strong> Maximum performance, minimal visuals</li>
-          <li><strong>Medium:</strong> Balanced performance and visuals</li>
-          <li><strong>High:</strong> Enhanced visuals with moderate performance impact</li>
-          <li><strong>Ultra:</strong> Best visuals, significant performance impact</li>
-        </ul>
-        
-        <h3>Customization Features</h3>
-        <p>Personalize your gaming experience:</p>
-        <ul>
-          <li><strong>Custom Skies:</strong> Replace the default skybox</li>
-          <li><strong>Custom Water:</strong> Enhanced water visuals</li>
-          <li><strong>Custom Models:</strong> Replace item and entity models</li>
-          <li><strong>Custom Animations:</strong> Enhanced animation effects</li>
-        </ul>
-      `
+      modules: [
+        {
+          id: 'custom-shaders',
+          title: 'Custom Shaders',
+          content: `<p>Toggle custom shader support and visual tweaks.</p>`
+        }
+      ]
     }
   };
 
-  // Generate category tabs
   const tabsContainer = document.getElementById('category-tabs');
-  const contentContainer = document.getElementById('category-container');
-  
-  // Create tabs for each category
-  Object.keys(categories).forEach((categoryKey, index) => {
-    const category = categories[categoryKey];
-    
-    // Create tab
-    const tab = document.createElement('div');
-    tab.className = `category-tab ${index === 0 ? 'active' : ''}`;
-    tab.textContent = category.title;
-    tab.dataset.category = categoryKey;
-    tabsContainer.appendChild(tab);
-    
-    // Create content box
-    const box = document.createElement('div');
-    box.className = `expandable-box ${index === 0 ? 'expanded' : ''}`;
-    box.innerHTML = `
-      <div class="box-header">
-        <div class="box-title">Category [${category.title}]</div>
-        <div class="arrow-button">
-          <svg viewBox="0 0 24 24">
-            <path d="M7 10l5 5 5-5z"></path>
-          </svg>
-        </div>
-      </div>
-      <div class="box-content">
-        <div class="content-inner scrollable-content">
-          ${category.content}
-        </div>
-      </div>
-    `;
-    contentContainer.appendChild(box);
-    
-    // Add click event to tab
-    tab.addEventListener('click', function() {
-      // Remove active class from all tabs
-      document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-      
-      // Add active class to clicked tab
-      this.classList.add('active');
-      
-      // Hide all content boxes
-      document.querySelectorAll('.expandable-box').forEach(box => {
-        box.classList.remove('expanded');
-      });
-      
-      // Show the selected content box
-      const categoryBoxes = document.querySelectorAll('.expandable-box');
-      categoryBoxes[index].classList.add('expanded');
-    });
-  });
+  const modulesList = document.getElementById('modules-list');
+  const categoryTitle = document.getElementById('category-title');
+  const moduleTitle = document.getElementById('module-title');
+  const moduleContent = document.getElementById('module-content');
 
-  // Add click events to all box headers
-  document.querySelectorAll('.box-header').forEach(header => {
-    header.addEventListener('click', function() {
-      const box = this.closest('.expandable-box');
-      box.classList.toggle('expanded');
+  let activeCategoryKey = Object.keys(categories)[0];
+  let activeModuleId = null;
+
+  function renderCategoryTabs() {
+    tabsContainer.innerHTML = '';
+    Object.keys(categories).forEach((key, index) => {
+      const tab = document.createElement('div');
+      tab.className = `category-tab ${key === activeCategoryKey ? 'active' : ''}`;
+      tab.textContent = categories[key].title;
+      tab.dataset.category = key;
+      tab.addEventListener('click', () => {
+        if (activeCategoryKey === key) return;
+        activeCategoryKey = key;
+        // select first module of new category
+        activeModuleId = categories[key].modules.length ? categories[key].modules[0].id : null;
+        renderCategoryTabs();
+        renderModulesList();
+        renderModuleDetail();
+      });
+      tabsContainer.appendChild(tab);
     });
-  });
+  }
+
+  function renderModulesList() {
+    modulesList.innerHTML = '';
+    const cat = categories[activeCategoryKey];
+    categoryTitle.textContent = cat.title;
+    if (!cat.modules || !cat.modules.length) {
+      modulesList.innerHTML = '<p>No modules available for this category.</p>';
+      moduleTitle.textContent = 'Select a module';
+      moduleContent.innerHTML = 'Choose a module on the left to see details here.';
+      return;
+    }
+
+    cat.modules.forEach(mod => {
+      const btn = document.createElement('button');
+      btn.className = `module-button ${activeModuleId === mod.id ? 'active' : ''}`;
+      btn.textContent = mod.title;
+      btn.dataset.moduleId = mod.id;
+      btn.addEventListener('click', () => {
+        activeModuleId = mod.id;
+        // update active state on buttons
+        document.querySelectorAll('.module-button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderModuleDetail();
+      });
+      modulesList.appendChild(btn);
+    });
+  }
+
+  function renderModuleDetail() {
+    const cat = categories[activeCategoryKey];
+    const mod = cat.modules.find(m => m.id === activeModuleId) || cat.modules[0];
+    if (!mod) {
+      moduleTitle.textContent = 'Select a module';
+      moduleContent.innerHTML = 'Choose a module on the left to see details here.';
+      return;
+    }
+    moduleTitle.textContent = mod.title;
+    moduleContent.innerHTML = mod.content;
+    // ensure the corresponding button is active
+    document.querySelectorAll('.module-button').forEach(b => b.classList.toggle('active', b.dataset.moduleId === mod.id));
+  }
+
+  // initial selection
+  activeModuleId = categories[activeCategoryKey].modules.length ? categories[activeCategoryKey].modules[0].id : null;
+  renderCategoryTabs();
+  renderModulesList();
+  renderModuleDetail();
+
 });
 
 // Sidebar functions (if not already in sidebar.js)
