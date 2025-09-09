@@ -313,3 +313,50 @@
     width: 100%;
   }
 }
+
+/* Responsive video wrapper for YouTube embeds (fixed size requested) */
+.video-wrapper {
+  position: relative;
+  width: 420px; /* requested fixed width */
+  height: 315px; /* requested fixed height */
+  max-width: 100%; /* allow shrink on very small screens */
+  overflow: hidden;
+  border-radius: 8px;
+  margin: 0.5rem auto; /* center horizontally */
+}
+.video-wrapper iframe {
+  width: 420px;
+  height: 315px;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  border: 0;
+}
+
+/* Ensure thumbnail image matches the fixed size */
+.video-thumb img {
+  width: 420px;
+  height: 315px;
+  max-width: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 6px;
+}
+
+.video-thumb {
+  display: block;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.video-caption {
+  text-align: center;
+  color: #444;
+  font-size: 0.95rem;
+  margin-top: 8px;
+}
+
+.video-thumb:hover img {
+  transform: scale(1.02);
+  transition: transform 120ms ease;
+}

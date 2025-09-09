@@ -1,5 +1,3 @@
-
-
 /* Main content layout with sidebar */
 main {
     margin-left: 200px;
@@ -51,10 +49,12 @@ main {
 
 .sidenav .closebtn {
     position: absolute;
-    top: 0;
+    top: 20px; /* move down so it's not hidden under the header */
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
+    z-index: 1200; /* ensure it's above the header */
+    pointer-events: auto;
 }
 
 .open-nav-btn {
@@ -121,8 +121,9 @@ main {
     color: white;
     text-decoration: none;
     font-weight: bold;
-    font-size: 1.5rem;
 }
+    font-size: 1.5rem;
+    gap: 8px;
 
 .logo-placeholder {
     color: white;
@@ -132,7 +133,7 @@ main {
 .nav-menu {
     display: flex;
     list-style: none;
-    margin: 0;
+    height: 22px; /* reduced logo height for a smaller header appearance */
     padding: 0;
 }
 
@@ -209,4 +210,26 @@ main {
     padding: 2rem;
     font-size: 1.2rem;
     color: #666;
+}
+
+/* Floating close button shown when sidenav is open (fallback) */
+.sidenav-close-floating {
+  position: fixed;
+  top: 14px;
+  left: 220px; /* sits to the right of the opened sidenav (250px width) */
+  z-index: 1205;
+  display: none; /* toggled by JS */
+  background: transparent;
+  color: white;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 6px 8px;
+}
+
+@media (max-width: 700px) {
+  .sidenav-close-floating {
+    left: 12px; /* small screens: place near left edge */
+    top: 74px;
+  }
 }

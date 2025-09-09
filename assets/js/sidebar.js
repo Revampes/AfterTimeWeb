@@ -1,19 +1,25 @@
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
     document.getElementById("main").classList.add("sidenav-open");
+    const floatBtn = document.getElementById('sidenav-close-floating');
+    if (floatBtn) floatBtn.style.display = 'block';
 }
 
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
     document.getElementById("main").classList.remove("sidenav-open");
+    const floatBtn = document.getElementById('sidenav-close-floating');
+    if (floatBtn) floatBtn.style.display = 'none';
 }
 
 // Close the sidenav if user clicks outside of it
 window.addEventListener('click', function(event) {
     const sidenav = document.getElementById('mySidenav');
     const openBtn = document.querySelector('.open-nav-btn');
+    const floatBtn = document.getElementById('sidenav-close-floating');
     if (event.target !== sidenav && event.target !== openBtn &&
-        !sidenav.contains(event.target) && !openBtn.contains(event.target)) {
+        !sidenav.contains(event.target) && !(openBtn && openBtn.contains(event.target)) &&
+        !(floatBtn && floatBtn.contains(event.target))) {
         closeNav();
     }
 });
@@ -64,6 +70,33 @@ window.addEventListener('resize', function() {
 
 // Set active class based on current page
 document.addEventListener('DOMContentLoaded', function() {
+    // hide floating close button initially if present
+    const floatBtnInit = document.getElementById('sidenav-close-floating');
+    if (floatBtnInit) floatBtnInit.style.display = 'none';
+
+    // Desktop sidebar collapse toggle
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const headerClose = document.getElementById('header-sidenav-close');
+    if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            sidebar.classList.toggle('collapsed');
+            document.body.classList.toggle('sidebar-collapsed');
+        });
+    }
+
+    if (headerClose && sidebar) {
+        headerClose.addEventListener('click', function(e) {
+            e.stopPropagation();
+            // Close mobile sidenav if open
+            closeNav();
+            // Toggle desktop sidebar collapsed state
+            sidebar.classList.toggle('collapsed');
+            document.body.classList.toggle('sidebar-collapsed');
+        });
+    }
+
     const currentPage = window.location.pathname.split('/').pop();
 
     document.querySelectorAll('.sidebar a, .sidenav a').forEach(link => {

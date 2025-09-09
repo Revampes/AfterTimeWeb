@@ -1,54 +1,42 @@
-document.addEventListener('DOMContentLoaded', function() {
-  // Category + modules data
+document.addEventListener('DOMContentLoaded', () => {
   const categories = {
     kuudra: {
-      title: "Kuudra",
+      title: 'Kuudra',
       modules: [
-        {
-          id: 'auto-refill-pearls',
-          title: 'Auto Refill Pearls',
-          content: `<p>Automatically refills your ender pearls from your inventory into the hotbar when you run out. Useful during boss fights to avoid being stranded without pearls.</p>`
-        },
-        {
-          id: 'dynamic-pearl-calculator',
-          title: 'Dynamic Pearl Calculator',
-          content: `<p>Shows an on-screen estimate of pearl usage and cooldowns to help plan engagements and retreats.</p>`
-        }
+        { id: 'auto-refill-pearls', title: 'Auto Refill Pearls', content: `<p>Automatically refills your ender pearls from your sack. Combo with pearl cancel.</p>` },
+        { id: 'dynamic-pearl-calculator', title: 'Dynamic Pearl Calculator', content: `<p>Highlight the spot/angle that you should aim at.</p>` }
       ]
     },
     dungeon: {
-      title: "Dungeon",
+      title: 'Dungeon',
       modules: [
-        {
-          id: 'auto-pot',
-          title: 'Auto Pot',
-          content: `<p>Automatically drinks potions when your health or other conditions are met.</p>`
-        },
-        {
-          id: 'mob-highlighter',
-          title: 'Mob Highlighter',
-          content: `<p>Highlights important mobs and rare spawns to make them easier to find in dungeons.</p>`
-        }
+        { id: 'leap-announce', title: 'Leap Announce', content: `<p>Announce in party chat that you have leaped to someone with in-game name.</p>` },
+        { id: 'mob-highlighter', title: 'Mob Highlighter', content: `<p>Highlights important mobs and rare spawns to make them easier to find in dungeons.</p>` }
       ]
     },
     fishing: {
-      title: "Fishing",
+      title: 'Fishing',
       modules: [
-        {
-          id: 'auto-fish',
-          title: 'Auto Fish',
-          content: `<p>Automatically reels and casts to speed up fishing sessions.</p>`
-        }
+        { id: 'auto-fish', title: 'Auto Fish', content: `<p>Automatically reels and casts your rod.</p><ul><li>AutoShift</li><li>SlugMode</li></ul>` }
       ]
     },
     render: {
-      title: "Render",
+      title: 'Render',
       modules: [
-        {
-          id: 'custom-shaders',
-          title: 'Custom Shaders',
-          content: `<p>Toggle custom shader support and visual tweaks.</p>`
-        }
+        { id: 'custom-shaders', title: 'Custom Shaders', content: `<p>Toggle custom shader support and visual tweaks.</p>` }
+      ]
+    },
+    skyblock: {
+      title: 'Skyblock',
+      modules: [
+        { id: 'fast-hotkey', title: 'Fast Hotkey', content: `<p>Create a UI for executing command without typing.</p>
+            <div class="video-wrapper">
+              <a class="video-thumb" href="https://youtu.be/ImsxT4CHpUo" target="_blank" rel="noopener noreferrer" title="Fast Hotkey Demo">
+                <img src="https://img.youtube.com/vi/ImsxT4CHpUo/hqdefault.jpg" alt="Fast Hotkey Demo">
+                <span class="play-overlay">▶</span>
+              </a>
+            </div>
+            <div class="video-caption">Click the thumbnail to open the video on YouTube</div>` }
       ]
     }
   };
@@ -59,32 +47,43 @@ document.addEventListener('DOMContentLoaded', function() {
   const moduleTitle = document.getElementById('module-title');
   const moduleContent = document.getElementById('module-content');
 
+  if (!tabsContainer || !modulesList || !categoryTitle || !moduleTitle || !moduleContent) {
+    console.warn('aftertimefault.js: required DOM elements not found.');
+    return;
+  }
+
   let activeCategoryKey = Object.keys(categories)[0];
   let activeModuleId = null;
 
   function renderCategoryTabs() {
     tabsContainer.innerHTML = '';
-    Object.keys(categories).forEach((key, index) => {
-      const tab = document.createElement('div');
-      tab.className = `category-tab ${key === activeCategoryKey ? 'active' : ''}`;
-      tab.textContent = categories[key].title;
-      tab.dataset.category = key;
-      tab.addEventListener('click', () => {
-        if (activeCategoryKey === key) return;
-        activeCategoryKey = key;
-        // select first module of new category
-        activeModuleId = categories[key].modules.length ? categories[key].modules[0].id : null;
-        renderCategoryTabs();
-        renderModulesList();
-        renderModuleDetail();
-      });
-      tabsContainer.appendChild(tab);
+    Object.keys(categories).forEach(key => {
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = `category-tab ${key === activeCategoryKey ? 'active' : ''}`;
+      el.dataset.category = key;
+      el.textContent = categories[key].title;
+      tabsContainer.appendChild(el);
     });
   }
 
+  // Use event delegation for category clicks
+  tabsContainer.addEventListener('click', (e) => {
+    const btn = e.target.closest && e.target.closest('.category-tab');
+    if (!btn) return;
+    const key = btn.dataset.category;
+    if (!key || !categories[key]) return;
+    if (key === activeCategoryKey) return;
+    activeCategoryKey = key;
+    activeModuleId = categories[key].modules.length ? categories[key].modules[0].id : null;
+    renderCategoryTabs();
+    renderModulesList();
+    renderModuleDetail();
+  });
+
   function renderModulesList() {
-    modulesList.innerHTML = '';
     const cat = categories[activeCategoryKey];
+    // update category title
     categoryTitle.textContent = cat.title;
     if (!cat.modules || !cat.modules.length) {
       modulesList.innerHTML = '<p>No modules available for this category.</p>';
@@ -92,22 +91,25 @@ document.addEventListener('DOMContentLoaded', function() {
       moduleContent.innerHTML = 'Choose a module on the left to see details here.';
       return;
     }
-
-    cat.modules.forEach(mod => {
-      const btn = document.createElement('button');
-      btn.className = `module-button ${activeModuleId === mod.id ? 'active' : ''}`;
-      btn.textContent = mod.title;
-      btn.dataset.moduleId = mod.id;
-      btn.addEventListener('click', () => {
-        activeModuleId = mod.id;
-        // update active state on buttons
-        document.querySelectorAll('.module-button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderModuleDetail();
-      });
-      modulesList.appendChild(btn);
-    });
+    // build buttons as HTML in one go to avoid duplicates
+    const html = cat.modules.map(mod => {
+      const active = activeModuleId === mod.id ? ' active' : '';
+      return `<button type="button" class="module-button${active}" data-module-id="${mod.id}">${mod.title}</button>`;
+    }).join('');
+    modulesList.innerHTML = html;
   }
+
+  // Delegated click handler for module buttons
+  modulesList.addEventListener('click', (e) => {
+    const btn = e.target.closest && e.target.closest('.module-button');
+    if (!btn) return;
+    const id = btn.dataset.moduleId || btn.getAttribute('data-module-id');
+    if (!id) return;
+    activeModuleId = id;
+    // update active class for buttons
+    modulesList.querySelectorAll('.module-button').forEach(b => b.classList.toggle('active', b.dataset.moduleId === id));
+    renderModuleDetail();
+  });
 
   function renderModuleDetail() {
     const cat = categories[activeCategoryKey];
@@ -119,8 +121,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     moduleTitle.textContent = mod.title;
     moduleContent.innerHTML = mod.content;
-    // ensure the corresponding button is active
-    document.querySelectorAll('.module-button').forEach(b => b.classList.toggle('active', b.dataset.moduleId === mod.id));
   }
 
   // initial selection
@@ -131,11 +131,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-// Sidebar functions (if not already in sidebar.js)
-function openNav() {
-  document.getElementById("mySidenav").style.width = "250px";
-}
-
-function closeNav() {
-  document.getElementById("mySidenav").style.width = "0";
-}
+// Sidebar helpers (keep these global for other pages)
+function openNav() { document.getElementById('mySidenav').style.width = '250px'; }
+function closeNav() { document.getElementById('mySidenav').style.width = '0'; }
