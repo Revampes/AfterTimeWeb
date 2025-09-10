@@ -462,7 +462,12 @@ body.theme-neon .mod-features { color: var(--text-primary); }
 }
 
 .notice-label {
-    color: red
+    color: red;
+}
+
+.notice-label li {
+    margin-left: 30px;
+    color: green;
 }
 
 li {

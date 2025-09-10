@@ -33,7 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'ghost-block', title: 'Floor7 Pre Ghost Block', content: `<p>Automatically create ghost block in f7 boss room for better gaming experience</p>
             <div class="notice-label">
                 <p>Warning: Use at your own risk!</p>
-                <p>This feature will be removed once DungeonBreaker is released.</p>
+                <p>This feature will not be removed once DungeonBreaker is released.</p>
+                <ul>
+                    <li>Instead, there will be ghost block stop you from walking (for more precise ghost block with dungeonbreaker)</li>
+                </ul>
             </div>
         `},
         { id: 'key-highlight', title: 'Wither/Blood Key Highlight', content: `<p>Highlights wither and blood key with ESP hitbox through wall.</p>`},
