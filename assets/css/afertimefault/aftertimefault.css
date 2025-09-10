@@ -498,7 +498,8 @@ body.theme-neon.aftertimefault-page .hero-blur-bg {
 }
 body.theme-neon.aftertimefault-page .hero-blur::after {
   content: '';
-  position: absolute; inset: 0;
+  position: absolute;
+  inset: 0;
   background: rgba(0,0,0,0.18);
   z-index: 1;
 }
@@ -564,3 +565,64 @@ body.theme-neon.aftertimefault-page .hero-inline.tall { --hero-inline-height:460
 body.theme-neon.aftertimefault-page .hero-inline.cover::before { background-size: cover; }
 body.theme-neon.aftertimefault-page .hero-inline.less-blur::before { filter: blur(4px) brightness(1.05); }
 body.theme-neon.aftertimefault-page .hero-inline.no-overlay::after { background: transparent; }
+
+/* Responsive single-image wrapper (centered, scales on desktop & mobile) */
+.image-wrapper {
+  display: block;
+  width: 100%;
+  max-width: 720px; /* desktop cap; keeps screenshots from getting too large */
+  margin: 12px auto; /* center horizontally with some vertical spacing */
+  text-align: center; /* safe default for any captions you may add later */
+}
+.image-wrapper img {
+  display: block;
+  width: 100%;
+  height: auto; /* maintain natural aspect ratio */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* Optional size modifiers you can add to the wrapper div */
+.image-wrapper.sm { max-width: 360px; }
+.image-wrapper.md { max-width: 540px; }
+.image-wrapper.lg { max-width: 720px; }
+.image-wrapper.xl { max-width: 840px; }
+
+/* Responsive tweaks */
+@media (min-width: 1280px) {
+  .image-wrapper { max-width: 840px; }
+}
+@media (max-width: 600px) {
+  .image-wrapper { max-width: 100%; margin: 10px auto; }
+}
+
+/* Reveal-on-scroll animation (fade in, right -> left) */
+@keyframes atf-fade-in-right {
+  from { opacity: 0; transform: translateX(28px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Initial hidden state for elements that will be revealed */
+.reveal-init {
+  opacity: 0;
+  transform: translateX(28px);
+  will-change: opacity, transform;
+}
+
+/* Active reveal state */
+.reveal-in {
+  animation: atf-fade-in-right 900ms ease-out both;
+}
+
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-init,
+  .reveal-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Optional: small utility to opt-out for any element */
+.reveal-noop { opacity: 1 !important; transform: none !important; animation: none !important; }

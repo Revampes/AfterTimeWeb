@@ -1,4 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Setup: reveal-on-scroll observer
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        el.classList.add('reveal-in');
+        el.classList.remove('reveal-init');
+        observer.unobserve(el);
+      }
+    });
+  }, { root: null, threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+
+  const markForReveal = (nodes) => {
+    if (!nodes) return;
+    const list = (nodes instanceof Element) ? [nodes] : nodes;
+    list.forEach(el => {
+      if (!el) return;
+      el.classList.add('reveal-init');
+      observer.observe(el);
+    });
+  };
+
+  // Mark initial static blocks in main content for reveal animation
+  markForReveal(document.querySelectorAll(
+    '#main > h1, .hero-blur, .features, .feature-card, .mod-description-container, .mod-card, .categories-layout, .modules-column, .details-column, .category-tabs, .module-detail, .tutorial-container, .tutorial-card, footer'
+  ));
+
   const categories = {
     kuudra: {
       title: 'Kuudra',
@@ -16,7 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p>Warning: Use at your own risk!</p>
              </div>
         `},
-        { id: 'track-arrow', title: 'Twilight/Toxic Arrow Tracker', content: `<p>Track the number of twilight and toxic arrow posion in player's inventory`},
+        { id: 'track-arrow', title: 'Twilight/Toxic Arrow Tracker', content: `<p>Track the number of twilight and toxic arrow posion in player's inventory
+            <div class="image-wrapper">
+                <img src="assets/images/photos/Skyblock/arrowposion.png" alt="Arrow Posion image">
+            </div>
+        `},
         { id: 'hide-useless-perk', title: 'Hide Useless Perk', content: `<p>Hide and block user from clicking useless perk</p>
              <div class="notice-label">
                 <p>Notice: Currently not working in progress!</p>
@@ -35,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p>Warning: Use at your own risk!</p>
                 <p>This feature will not be removed once DungeonBreaker is released.</p>
                 <ul>
-                    <li>Instead, there will be ghost block stop you from walking (for more precise ghost block with dungeonbreaker)</li>
+                    <li>Instead, there will be ghost block stop you from walking (for more precise mining with dungeonbreaker)</li>
                 </ul>
             </div>
         `},
@@ -78,7 +109,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="play-overlay">▶</span>
               </a>
             </div>
-            <div class="video-caption">Click the thumbnail to open the video on YouTube</div>` }
+            <div class="video-caption">Click the thumbnail to open the video on YouTube</div>` },
+        { id: 'storage-preview', title: 'Storage Preview', content: `<p>Allow player to view and grab items from enderchest or storage</p>
+            <div class="image-wrapper">
+                <img src="assets/images/photos/Skyblock/storagepreview.png" alt="Storage preview image">
+            </div>`}
       ]
     },
     performance: {
@@ -113,6 +148,8 @@ document.addEventListener('DOMContentLoaded', () => {
       el.textContent = categories[key].title;
       tabsContainer.appendChild(el);
     });
+    // Apply reveal animation to newly rendered tabs
+    markForReveal([tabsContainer]);
   }
 
   // Use event delegation for category clicks
@@ -137,6 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
       modulesList.innerHTML = '<p>No modules available for this category.</p>';
       moduleTitle.textContent = 'Select a module';
       moduleContent.innerHTML = 'Choose a module on the left to see details here.';
+      // Apply reveal animation to empty states
+      markForReveal([modulesList, moduleContent]);
       return;
     }
     // build buttons as HTML in one go to avoid duplicates
@@ -145,6 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return `<button type="button" class="module-button${active}" data-module-id="${mod.id}">${mod.title}</button>`;
     }).join('');
     modulesList.innerHTML = html;
+    // Apply reveal animation to newly rendered modules list
+    markForReveal([modulesList]);
   }
 
   // Delegated click handler for module buttons
@@ -165,10 +206,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!mod) {
       moduleTitle.textContent = 'Select a module';
       moduleContent.innerHTML = 'Choose a module on the left to see details here.';
+      markForReveal([moduleContent]);
       return;
     }
     moduleTitle.textContent = mod.title;
     moduleContent.innerHTML = mod.content;
+    // Apply reveal animation to newly injected module content
+    markForReveal([moduleTitle, moduleContent]);
+    markForReveal(moduleContent.querySelectorAll(':scope > *'));
   }
 
   // initial selection

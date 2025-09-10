@@ -18,7 +18,7 @@ body {
     font-family: var(--font-family);
     line-height: 1.6;
     color: var(--text-color);
-    padding-top: 60px; /* Added to prevent content from being hidden under fixed header */
+    padding-top: 60px; /* Ensure content starts below fixed header */
 }
 
 /* Footer styles */
@@ -108,6 +108,185 @@ footer {
 .spacing-for-header {
     padding-top: 80px;
 }
+/* Hero Section inspired by sample */
+.hero-section {
+    padding: 6rem 5% 6rem 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(135deg, var(--dark-bg) 0%, #1a001a 100%);
+    position: relative;
+    overflow: hidden;
+    min-height: 60vh;
+    margin-left: -200px; /* Offset sidebar width */
+    padding-left: calc(5% + 200px); /* Add back the sidebar space */
+}
+
+.hero-content {
+    max-width: 800px;
+    z-index: 10;
+    position: relative;
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    color: var(--accent-purple);
+    text-shadow: 0 0 20px var(--accent-purple);
+    animation: textGlow 2s infinite alternate;
+}
+
+.hero-content p {
+    margin-bottom: 3.5rem;
+    font-size: 1.2rem;
+    color: var(--dark-text);
+}
+
+/* CTA Button and Glow Effect */
+.cta-button, .download-button, .showcase-button {
+    display: inline-block;
+    padding: 1rem 3rem;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+    color: var(--text-color);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 15px var(--primary-purple);
+    animation: glowAnimation 1.5s infinite alternate;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.cta-button:hover, .download-button:hover, .showcase-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 30px var(--primary-purple);
+}
+
+/* Features Section */
+.features-section {
+    padding-top: 8rem;
+    padding-bottom: 4rem;
+    padding-left: 10%;
+    padding-right: 10%;
+    text-align: center;
+    margin-left: -200px;
+    padding-left: calc(10% + 200px);
+}
+
+.features-section h2, .showcase-section h2, .download-section h2 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    color: var(--primary-purple);
+    text-shadow: 0 0 10px rgba(108, 92, 231, 0.5);
+}
+
+.feature-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 3rem;
+}
+
+.feature-item {
+    background: rgba(108, 92, 231, 0.1);
+    border: 2px solid var(--secondary-purple);
+    padding: 2.5rem;
+    border-radius: 15px;
+    width: 300px;
+    box-shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
+    transition: transform 0.3s;
+}
+
+.feature-item h3 {
+    color: var(--accent-purple);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.feature-item p {
+    color: var(--dark-text);
+}
+
+.feature-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(108, 92, 231, 0.4);
+}
+
+/* Showcase Section */
+.showcase-section {
+    padding: 4rem 10%;
+    text-align: center;
+    margin-left: -200px;
+    padding-left: calc(10% + 200px);
+}
+
+.showcase-container {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.showcase-card {
+    color: var(--dark-text);
+    text-align: left;
+}
+
+.showcase-card h3 {
+    color: var(--primary-purple);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.showcase-card p {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.showcase-card ul {
+    margin-bottom: 2rem;
+    padding-left: 2rem;
+}
+
+.showcase-card li {
+    margin-bottom: 0.5rem;
+    color: var(--dark-text);
+}
+
+.showcase-button {
+    display: block;
+    text-align: center;
+    margin: 2rem auto 0;
+    width: fit-content;
+}
+
+/* Download Section */
+.download-section {
+    background: var(--card-bg);
+    padding: 4rem 10%;
+    border-top: 1px solid rgba(108, 92, 231, 0.1);
+    text-align: center;
+    margin-left: -200px;
+    padding-left: calc(10% + 200px);
+}
+
+.download-section p {
+    color: var(--dark-text);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.download-button {
+    margin-top: 2rem;
+}
+
 
 @media (max-width: 700px) {
     .spacing-for-header {

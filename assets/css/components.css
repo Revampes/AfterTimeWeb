@@ -25,7 +25,7 @@ main {
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 1000;
+    z-index: 1002; /* Higher than header to ensure it appears above */
     top: 0;
     left: 0;
     background-color: #111;
@@ -49,7 +49,7 @@ main {
 
 .sidenav .closebtn {
     position: absolute;
-    top: 20px; /* move down so it's not hidden under the header */
+    top: 70px; /* move down below the fixed header */
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
@@ -67,7 +67,7 @@ main {
     position: fixed;
     top: 70px; /* Below header */
     left: 20px;
-    z-index: 999;
+    z-index: 1003; /* Higher than both header and sidenav */
     display: none;
 }
 
@@ -99,22 +99,24 @@ main {
 
 /* Header styles */
 .main-header {
-    background-color: #333;
-    color: white;
+    background-color: var(--dark-bg);
+    padding: 1rem 5%;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 900;
-    padding: 0 2rem;
+    z-index: 900; /* Lower than sidebar */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
     height: 60px;
+    display: flex;
+    align-items: center;
 }
 
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 100%;
 }
 
 .nav-brand {
@@ -124,29 +126,43 @@ main {
 }
 
 .nav-brand a {
-    color: white;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent-purple);
+    text-shadow: 0 0 15px var(--accent-purple);
     text-decoration: none;
-    font-weight: bold;
-    display: inline-flex;
-    align-items: center;
 }
 
-.nav-brand a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
+.nav-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
 }
-    height: 44px !important;      /* fixed height to prevent oversized logo */
-    max-height: 44px !important;  /* enforce cap */
-    width: auto !important;
-    max-width: 180px !important;   /* hard cap on width */
-    height: 40px;       /* constrained to header height */
-    max-height: 48px;
+
+.nav-menu li {
+    margin-left: 2rem;
+}
+
+.nav-menu a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.3s, text-shadow 0.3s;
+}
+
+.nav-menu a:hover {
+    color: var(--primary-purple);
+    text-shadow: 0 0 10px var(--primary-purple);
+}
+
+/* Site logo styling */
+.site-logo {
+    height: 44px;
+    max-width: 180px;
     width: auto;
-    max-width: 140px;   /* avoid overly wide logo */
-    display: inline-block;
-    object-fit: cover;
-    border-radius: 6px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px var(--accent-purple));
 }
 
 @media (max-width: 1024px) {
@@ -154,62 +170,6 @@ main {
 }
 @media (max-width: 700px) {
     .site-logo { height: 30px; max-width: 110px; }
-}
-
-.nav-menu li {
-    margin: 0 15px;
-}
-
-.nav-menu a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.nav-menu a:hover {
-    color: #ddd;
-}
-
-.nav-toggle {
-    display: none;
-    flex-direction: column;
-    cursor: pointer;
-}
-
-.nav-toggle span {
-    width: 25px;
-    height: 3px;
-    background: white;
-    margin: 3px 0;
-    transition: 0.3s;
-}
-
-/* Mobile navigation */
-@media (max-width: 768px) {
-    .nav-menu {
-        position: fixed;
-        left: -100%;
-        top: 60px;
-        flex-direction: column;
-        background-color: #333;
-        width: 100%;
-        text-align: center;
-        transition: 0.3s;
-        box-shadow: 0 10px 27px rgba(0,0,0,0.05);
-        padding: 20px 0;
-    }
-
-    .nav-menu.active {
-        left: 0;
-    }
-
-    .nav-menu li {
-        margin: 15px 0;
-    }
-
-    .nav-toggle {
-        display: flex;
-    }
 }
 
 /* Page title styles */

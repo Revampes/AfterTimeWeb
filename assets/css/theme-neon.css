@@ -74,10 +74,39 @@ body.theme-neon .nav-menu a:hover { color: var(--neon-accent-2); }
 
 /* Category tabs & module list (AfterTimeFault) */
 body.theme-neon .category-tabs { padding-top: 4px; }
-body.theme-neon .category-tab {
-  background: #252838;
+
+/* Ensure mobile menu button is accessible */
+body.theme-neon .open-nav-btn {
+  position: fixed !important;
+  top: 70px !important;
+  left: 20px !important;
+  z-index: 1003 !important;
+  background-color: rgba(20,22,34,0.9) !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Mobile sidebar styling */
+body.theme-neon .sidenav {
+  background-color: rgba(20,22,34,0.98) !important;
+  z-index: 1002 !important;
+  backdrop-filter: blur(15px);
+}
+
+body.theme-neon .sidenav a {
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+body.theme-neon .sidenav a:hover {
+  color: var(--neon-accent-2) !important;
+  background: rgba(255,255,255,0.05);
   border: 1px solid #333a55;
-  color: var(--text-dim);
+
+body.theme-neon .sidenav .closebtn {
+  color: var(--text-primary) !important;
+  z-index: 1200 !important;
+}
   font-size: 0.9rem;
   letter-spacing: .5px;
 }
@@ -162,3 +191,4 @@ body.theme-neon .modules-column, body.theme-neon .details-column { background: t
 body.theme-neon .feature-card, body.theme-neon .module-detail { box-shadow: 0 4px 20px -4px rgba(0,0,0,0.6); }
 body.theme-neon .sidebar { background: #181a27; border-right: 1px solid rgba(255,255,255,0.06); }
 body.theme-neon .sidebar a.active { background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); color:#fff; }
+
