@@ -5,6 +5,13 @@
     box-sizing: border-box;
 }
 
+html, body {
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    max-width: 100%;
+    width: 100%;
+    height: 100%; /* Add height to enable proper footer positioning */
+}
+
 :root {
     --primary-color: #2c3e50;
     --secondary-color: #3498db;
@@ -19,6 +26,13 @@ body {
     line-height: 1.6;
     color: var(--text-color);
     padding-top: 60px; /* Ensure content starts below fixed header */
+    display: flex;
+    flex-direction: column;
+    min-height: 100%; /* Ensure body takes at least full height */
+}
+
+main {
+    flex: 1 0 auto; /* Allow main to grow but not shrink, taking available space */
 }
 
 /* Footer styles */
@@ -28,6 +42,9 @@ footer {
     text-align: center;
     padding: 1rem;
     margin-top: 2rem;
+    width: 100%;
+    position: relative; /* Position relative to ensure it stays visible */
+    flex-shrink: 0; /* Prevent footer from shrinking */
 }
 
 /* Content styles */
@@ -48,11 +65,11 @@ footer {
 }
 
 .feature-card {
-    background: white;
     padding: 1.5rem;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     transition: transform 0.3s ease;
+    text-align: center;
 }
 
 .feature-card:hover {

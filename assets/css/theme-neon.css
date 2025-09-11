@@ -102,14 +102,10 @@ body.theme-neon .sidenav a:hover {
   color: var(--neon-accent-2) !important;
   background: rgba(255,255,255,0.05);
   border: 1px solid #333a55;
+}
+body.theme-neon .sidenav .closebtn { color: var(--text-primary) !important; z-index: 1200 !important; }
 
-body.theme-neon .sidenav .closebtn {
-  color: var(--text-primary) !important;
-  z-index: 1200 !important;
-}
-  font-size: 0.9rem;
-  letter-spacing: .5px;
-}
+/* Category tab styling */
 body.theme-neon .category-tab:hover { color: #fff; border-color: #465072; }
 body.theme-neon .category-tab.active {
   background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
@@ -118,6 +114,7 @@ body.theme-neon .category-tab.active {
   border-color: transparent;
 }
 
+/* Module list and button styles */
 body.theme-neon .modules-list { padding-right: 4px; }
 body.theme-neon .module-button {
   background: #24273a;
@@ -138,6 +135,7 @@ body.theme-neon .module-button.active {
   box-shadow: 0 0 10px rgba(110,142,251,0.9), 0 0 24px rgba(167,119,227,0.5);
 }
 
+/* Module detail styling */
 body.theme-neon .module-detail {
   background: var(--panel-bg);
   color: var(--text-primary);
@@ -191,4 +189,3 @@ body.theme-neon .modules-column, body.theme-neon .details-column { background: t
 body.theme-neon .feature-card, body.theme-neon .module-detail { box-shadow: 0 4px 20px -4px rgba(0,0,0,0.6); }
 body.theme-neon .sidebar { background: #181a27; border-right: 1px solid rgba(255,255,255,0.06); }
 body.theme-neon .sidebar a.active { background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); color:#fff; }
-
