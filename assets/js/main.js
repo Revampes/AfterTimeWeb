@@ -73,3 +73,35 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(element);
     });
 });
+
+// Highlight correct sidebar / sidenav link based on current page
+function setActiveSidebarLink() {
+    try {
+        const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+        // Sidebar links
+        document.querySelectorAll('.sidebar nav a, .nav-menu a, .sidenav a').forEach(a => {
+            const href = a.getAttribute('href');
+            if (!href) return;
+            // Normalize href (ignore hashes)
+            const linkFile = href.split('#')[0].split('?')[0].split('/').pop();
+            if (!linkFile) return;
+            if (linkFile === currentFile) {
+                a.classList.add('active');
+            } else {
+                a.classList.remove('active');
+            }
+        });
+    } catch (e) {
+        console.warn('setActiveSidebarLink error', e);
+    }
+}
+
+// run on DOMContentLoaded (also present earlier in this file)
+document.addEventListener('DOMContentLoaded', () => {
+    setActiveSidebarLink();
+
+    // Remove any legacy tasks container that might still be in the DOM (safety cleanup)
+    try {
+        document.querySelectorAll('#tasks-container, .tasks-container').forEach(el => el.remove());
+    } catch (e) { /* ignore */ }
+});

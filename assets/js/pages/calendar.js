@@ -11,16 +11,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const nextMonthBtn = document.getElementById('next-month');
     const selectedDateElement = document.getElementById('selected-date');
     const tasksContainer = document.getElementById('tasks-container');
-    const addTaskBtn = document.getElementById('add-task');
+    const multiTaskBtn = document.getElementById('add-multi-task');
     const taskModal = document.getElementById('task-modal');
+    const multiTaskModal = document.getElementById('multi-task-modal');
     const closeModal = document.querySelector('.close-modal');
+    const closeMultiModal = document.querySelector('.close-multi-modal');
     const cancelButton = document.getElementById('cancel-button');
+    const cancelMultiBtn = document.getElementById('cancel-multi-button');
     const taskForm = document.getElementById('task-form');
+    const multiTaskForm = document.getElementById('multi-task-form');
     const dailyScheduleContainer = document.getElementById('daily-schedule-container');
     const dailySchedule = document.getElementById('daily-schedule');
     const manageList = document.getElementById('manage-list');
 
-    // --- restored date tracking (needed for rendering) ---
+    // --- date tracking ---
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth();
     let currentYear = currentDate.getFullYear();
@@ -108,15 +112,31 @@ document.addEventListener('DOMContentLoaded', function() {
     function setupEventListeners() {
         prevMonthBtn.addEventListener('click', previousMonth);
         nextMonthBtn.addEventListener('click', nextMonth);
-        addTaskBtn.addEventListener('click', openTaskModal);
+        multiTaskBtn.addEventListener('click', openMultiTaskModal);
         closeModal.addEventListener('click', closeTaskModal);
         cancelButton.addEventListener('click', closeTaskModal);
         taskForm.addEventListener('submit', saveTask);
 
-        // Close modal when clicking outside content
+        if (multiTaskBtn) {
+            multiTaskBtn.addEventListener('click', openMultiTaskModal);
+        }
+        if (closeMultiModal) {
+            closeMultiModal.addEventListener('click', closeMultiTaskModal);
+        }
+        if (cancelMultiBtn) {
+            cancelMultiBtn.addEventListener('click', closeMultiTaskModal);
+        }
+        if (multiTaskForm) {
+            multiTaskForm.addEventListener('submit', saveMultiTask);
+        }
+
+        // Close modals when clicking outside content
         window.addEventListener('click', function(event) {
             if (event.target === taskModal) {
                 closeTaskModal();
+            }
+            if (event.target === multiTaskModal) {
+                closeMultiTaskModal();
             }
         });
     }
@@ -236,6 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
         badge.textContent = count > 0 ? count : '';
         badge.dataset.count = String(count);
     }
+
     function recomputeDayCount(date){
         if (!date) return;
         if (useLocal){
@@ -244,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         // If currently selected date equals date, we already have tasks in the panel
-        if (selectedDate === date){
+        if (selectedDate === date && tasksContainer){
             const n = tasksContainer.querySelectorAll('.task-item').length;
             updateDayBadge(date, n);
             return;
@@ -320,7 +341,9 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedDateElement.textContent = dateObj.toLocaleDateString('en-US', options);
 
         // Enable add task button
-        addTaskBtn.disabled = false;
+        if (multiTaskBtn) {
+            multiTaskBtn.disabled = false;
+        }
 
         // Fetch and display tasks for this date
         fetchTasks(dateString);
@@ -383,20 +406,31 @@ document.addEventListener('DOMContentLoaded', function() {
             eventEl.style.height = `${durationPercent}%`;
             eventEl.style.left = '0';
             eventEl.style.right = '0.5rem';
+
+            // Create title element
+            const titleEl = document.createElement('div');
+            titleEl.className = 'scheduled-event-title';
+            titleEl.textContent = task.title;
+            eventEl.appendChild(titleEl);
+
+            // Add the time display back
+            const timeEl = document.createElement('div');
+            timeEl.className = 'scheduled-event-time';
+            timeEl.textContent = formatTimeRange(startTime, endTime);
+            eventEl.appendChild(timeEl);
+
+            // Create delete button and position at the right
             const delBtn = document.createElement('button');
             delBtn.className = 'scheduled-event-delete';
             delBtn.type = 'button';
             delBtn.textContent = '×';
+            delBtn.style.position = 'absolute';
+            delBtn.style.right = '3px';
+            delBtn.style.top = '3px';
             delBtn.addEventListener('click',(ev)=>{ ev.stopPropagation(); if(confirm('Delete this task?')) deleteTaskFromServer(task.id); });
-            const titleEl = document.createElement('div');
-            titleEl.className = 'scheduled-event-title';
-            titleEl.textContent = task.title;
-            const timeEl = document.createElement('div');
-            timeEl.className = 'scheduled-event-time';
-            timeEl.textContent = formatTimeRange(startTime, endTime);
             eventEl.appendChild(delBtn);
-            eventEl.appendChild(titleEl);
-            eventEl.appendChild(timeEl);
+
+            // Add event listener for editing
             eventEl.addEventListener('click', () => { openEditTaskModal(task.id); });
             dailySchedule.appendChild(eventEl);
         });
@@ -442,7 +476,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="manage-item-title">${t.title || '(No title)'}</div>
                         <div class="manage-item-time">${timeStr}</div>
                         <div class="manage-item-actions">
-                            <button class="manage-btn" data-act="edit" data-id="${t.id}">EDIT</button>
                             <button class="manage-btn delete" data-act="del" data-id="${t.id}">DEL</button>
                         </div>
                     </div>`;
@@ -452,9 +485,7 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.addEventListener('click', (e)=>{
                 const id = e.currentTarget.getAttribute('data-id');
                 const act = e.currentTarget.getAttribute('data-act');
-                if (act === 'edit') {
-                    openEditTaskModal(id);
-                } else if (act === 'del') {
+                if (act === 'del') {
                     if (confirm('Delete this task?')) deleteTaskFromServer(id);
                 }
             });
@@ -465,7 +496,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function fetchTasks(date) {
         return new Promise(resolve => {
             // Clear any existing tasks first to prevent duplicates
-            tasksContainer.innerHTML = '<p class="loading">Loading tasks...</p>';
+            if (tasksContainer) {
+                tasksContainer.innerHTML = '<p class="loading">Loading tasks...</p>';
+            }
 
             if (useLocal) {
                 const tasks = getLocalTasksByDate(date);
@@ -484,7 +517,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(tasks => {
                     // Always clear existing tasks first
-                    tasksContainer.innerHTML = '';
+                    if (tasksContainer) {
+                        tasksContainer.innerHTML = '';
+                    }
 
                     // Display the tasks
                     displayTasks(tasks);
@@ -503,7 +538,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     resolve(tasks);
                 })
                 .catch(() => {
-                    tasksContainer.innerHTML = '<p class="no-tasks-message">No tasks for this date</p>';
+                    if (tasksContainer) {
+                        tasksContainer.innerHTML = '<p class="no-tasks-message">No tasks for this date</p>';
+                    }
                     updateManageList([]);
                     if (selectedDate === date) updateDayBadge(date, 0);
                     resolve([]);
@@ -513,6 +550,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Display tasks in the tasks panel
     function displayTasks(tasks) {
+        if (!tasksContainer) return;
+
         if (!tasks || tasks.length === 0) {
             tasksContainer.innerHTML = '<p class="no-tasks-message">No tasks for this date</p>';
             return;
@@ -538,26 +577,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         ${timeDisplay ? `<div class="task-time">${timeDisplay}</div>` : ''}
                     </div>
                     ${task.description ? `<div class="task-description">${task.description}</div>` : ''}
-                    <div class="task-actions">
-                        <button class="task-action-btn edit-btn" onclick="editTask('${task.id}')">Edit</button>
-                        <button class="task-action-btn delete-btn" onclick="deleteTask('${task.id}')">Delete</button>
-                    </div>
                 </div>
             `;
         });
 
         tasksContainer.innerHTML = tasksHTML;
-
-        // Add global functions for edit/delete buttons
-        window.editTask = function(taskId) {
-            openEditTaskModal(taskId);
-        };
-
-        window.deleteTask = function(taskId) {
-            if (confirm('Are you sure you want to delete this task?')) {
-                deleteTaskFromServer(taskId);
-            }
-        };
     }
 
     // Format time for display (12-hour format)
@@ -566,6 +590,273 @@ document.addEventListener('DOMContentLoaded', function() {
         const h = hours % 12 || 12;
         const ampm = hours < 12 ? 'AM' : 'PM';
         return `${h}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+    }
+
+    // Multi-day selector functionality
+    let multiSelectorMonth = currentDate.getMonth();
+    let multiSelectorYear = currentDate.getFullYear();
+    const selectedDates = new Set(); // Store selected dates
+    const multiMonthYearElement = document.getElementById('multi-month-year');
+    const multiPrevMonthBtn = document.getElementById('multi-prev-month');
+    const multiNextMonthBtn = document.getElementById('multi-next-month');
+    const multiDayGrid = document.querySelector('.multi-day-grid');
+    const selectAllVisibleBtn = document.getElementById('select-all-visible');
+    const clearSelectionBtn = document.getElementById('clear-selection');
+    const selectedDatesCountElement = document.getElementById('selected-dates-count');
+    const selectedDatesInput = document.getElementById('selected-dates');
+
+    function renderMultiDaySelector() {
+        if (!multiMonthYearElement || !multiDayGrid) return;
+
+        // Update header month/year text
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
+        multiMonthYearElement.textContent = `${monthNames[multiSelectorMonth]} ${multiSelectorYear}`;
+
+        // Clear existing calendar days (but keep the weekday headers)
+        const weekdayHeaders = Array.from(multiDayGrid.querySelectorAll('.mini-weekday-header'));
+        multiDayGrid.innerHTML = '';
+
+        // Add weekday headers back
+        weekdayHeaders.forEach(header => {
+            multiDayGrid.appendChild(header);
+        });
+
+        // Get first day of month and total days in month
+        const firstDay = new Date(multiSelectorYear, multiSelectorMonth, 1).getDay(); // 0 = Sunday, 1 = Monday, etc.
+        const daysInMonth = new Date(multiSelectorYear, multiSelectorMonth + 1, 0).getDate();
+
+        // Get days from previous month to display
+        const prevMonth = multiSelectorMonth - 1 < 0 ? 11 : multiSelectorMonth - 1;
+        const prevYear = prevMonth === 11 ? multiSelectorYear - 1 : multiSelectorYear;
+        const prevMonthDays = new Date(multiSelectorYear, multiSelectorMonth, 0).getDate();
+
+        // Create grid with days (add previous month days to fill the first week)
+        for (let i = 0; i < firstDay; i++) {
+            const day = prevMonthDays - firstDay + i + 1;
+            createMultiDayElement(day, prevMonth, prevYear, true);
+        }
+
+        // Add current month days
+        for (let i = 1; i <= daysInMonth; i++) {
+            createMultiDayElement(i, multiSelectorMonth, multiSelectorYear, false);
+        }
+
+        // Calculate and add days from next month to complete the grid
+        const totalDaysDisplayed = firstDay + daysInMonth;
+        const nextMonthDays = 7 - (totalDaysDisplayed % 7);
+
+        if (nextMonthDays < 7) { // Don't add a row if the month ends perfectly on Saturday
+            const nextMonth = multiSelectorMonth + 1 > 11 ? 0 : multiSelectorMonth + 1;
+            const nextYear = nextMonth === 0 ? multiSelectorYear + 1 : multiSelectorYear;
+
+            for (let i = 1; i <= nextMonthDays; i++) {
+                createMultiDayElement(i, nextMonth, nextYear, true);
+            }
+        }
+
+        // Update selected dates count
+        updateSelectedDatesCount();
+    }
+
+    function createMultiDayElement(day, month, year, isOtherMonth) {
+        const dayElement = document.createElement('div');
+        dayElement.className = 'mini-day';
+        if (isOtherMonth) {
+            dayElement.classList.add('other-month');
+        }
+
+        // Check if this day is today
+        const today = new Date();
+        if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear() && !isOtherMonth) {
+            dayElement.classList.add('today');
+        }
+
+        // Date string for data attribute (YYYY-MM-DD)
+        const dateString = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+        dayElement.dataset.date = dateString;
+        dayElement.textContent = day;
+
+        // Check if this date is already selected
+        if (selectedDates.has(dateString)) {
+            dayElement.classList.add('selected');
+        }
+
+        // Add click event listener to toggle selection
+        dayElement.addEventListener('click', function() {
+            if (selectedDates.has(dateString)) {
+                selectedDates.delete(dateString);
+                this.classList.remove('selected');
+            } else {
+                selectedDates.add(dateString);
+                this.classList.add('selected');
+            }
+            updateSelectedDatesCount();
+        });
+
+        multiDayGrid.appendChild(dayElement);
+    }
+
+    function updateSelectedDatesCount() {
+        if (selectedDatesCountElement) {
+            selectedDatesCountElement.textContent = selectedDates.size;
+        }
+        if (selectedDatesInput) {
+            selectedDatesInput.value = Array.from(selectedDates).join(',');
+        }
+    }
+
+    function navigateMultiSelectorPrevMonth() {
+        multiSelectorMonth--;
+        if (multiSelectorMonth < 0) {
+            multiSelectorMonth = 11;
+            multiSelectorYear--;
+        }
+        renderMultiDaySelector();
+    }
+
+    function navigateMultiSelectorNextMonth() {
+        multiSelectorMonth++;
+        if (multiSelectorMonth > 11) {
+            multiSelectorMonth = 0;
+            multiSelectorYear++;
+        }
+        renderMultiDaySelector();
+    }
+
+    function selectAllVisibleDays() {
+        const visibleDays = multiDayGrid.querySelectorAll('.mini-day:not(.other-month)');
+        visibleDays.forEach(day => {
+            const dateString = day.dataset.date;
+            selectedDates.add(dateString);
+            day.classList.add('selected');
+        });
+        updateSelectedDatesCount();
+    }
+
+    function clearAllSelectedDays() {
+        selectedDates.clear();
+        const allSelectedDays = multiDayGrid.querySelectorAll('.mini-day.selected');
+        allSelectedDays.forEach(day => {
+            day.classList.remove('selected');
+        });
+        updateSelectedDatesCount();
+    }
+
+    // Initialize multi-day selector when opening the modal
+    function initMultiDaySelector() {
+        // Reset to current date/selection
+        multiSelectorMonth = currentDate.getMonth();
+        multiSelectorYear = currentDate.getFullYear();
+        selectedDates.clear();
+
+        // Add the currently selected date
+        if (selectedDate) {
+            selectedDates.add(selectedDate);
+        }
+
+        renderMultiDaySelector();
+
+        // Set up event listeners for multi-day selector navigation
+        if (multiPrevMonthBtn) {
+            multiPrevMonthBtn.addEventListener('click', navigateMultiSelectorPrevMonth);
+        }
+        if (multiNextMonthBtn) {
+            multiNextMonthBtn.addEventListener('click', navigateMultiSelectorNextMonth);
+        }
+        if (selectAllVisibleBtn) {
+            selectAllVisibleBtn.addEventListener('click', selectAllVisibleDays);
+        }
+        if (clearSelectionBtn) {
+            clearSelectionBtn.addEventListener('click', clearAllSelectedDays);
+        }
+    }
+
+    // Multi-day task modal functions
+    function openMultiTaskModal() {
+        if (!selectedDate) { alert('Please select a date first'); return; }
+        if (!multiTaskForm) return;
+
+        multiTaskForm.reset();
+        selectedDates.clear();
+        selectedDates.add(selectedDate); // Start with current selected date
+
+        initMultiDaySelector();
+        multiTaskModal.style.display = 'block';
+    }
+
+    function closeMultiTaskModal() {
+        if (multiTaskModal) {
+            multiTaskModal.style.display = 'none';
+        }
+    }
+
+    function saveMultiTask(e) {
+        e.preventDefault();
+        const title = document.getElementById('multi-task-title').value;
+        const startTime = document.getElementById('multi-task-time').value;
+        const endTime = document.getElementById('multi-task-end-time').value;
+        const description = document.getElementById('multi-task-description').value;
+
+        if (!title) { alert('Title required'); return; }
+        if (startTime && endTime && startTime >= endTime) { alert('End time must be after start time'); return; }
+        if (selectedDates.size === 0) { alert('Please select at least one date'); return; }
+
+        // Get all selected dates
+        const dates = Array.from(selectedDates);
+
+        // Create tasks for each date
+        let createdCount = 0;
+        let errors = 0;
+
+        const createNextTask = (index) => {
+            if (index >= dates.length) {
+                alert(`Created tasks for ${createdCount} days${errors ? ` (${errors} errors)` : ''}`);
+                closeMultiTaskModal();
+                // Refresh current selected date
+                if (selectedDate) {
+                    fetchTasks(selectedDate);
+                    renderDailySchedule(selectedDate);
+                    recomputeDayCount(selectedDate);
+                }
+                return;
+            }
+
+            const date = dates[index];
+            const taskData = {
+                title,
+                task_date: date,
+                task_time: startTime || null,
+                end_time: endTime || null,
+                description: description || null
+            };
+
+            if (useLocal) {
+                createLocalTask(taskData);
+                createdCount++;
+                createNextTask(index + 1);
+            } else {
+                fetch('api/tasks.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(taskData)
+                })
+                    .then(r => {
+                        if (!r.ok) throw new Error();
+                        return r.json();
+                    })
+                    .then(() => {
+                        createdCount++;
+                        createNextTask(index + 1);
+                    })
+                    .catch(() => {
+                        errors++;
+                        createNextTask(index + 1);
+                    });
+            }
+        };
+
+        createNextTask(0);
     }
 
     // Open task modal for adding a new task
@@ -663,7 +954,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Delete task from server
     function deleteTaskFromServer(taskId) {
+        // Validate taskId is provided and is not falsy
+        if (!taskId) {
+            console.error('Task ID is missing for delete operation');
+            alert('Error: Cannot delete task with missing ID');
+            return;
+        }
+
         const targetDate = selectedDate;
+        console.log('Attempting to delete task with ID:', taskId, 'Type:', typeof taskId);
+
         const after = (removedDate) => {
             fetchTasks(targetDate).then(tasks => {
                 renderDailySchedule(targetDate);
@@ -671,15 +971,46 @@ document.addEventListener('DOMContentLoaded', function() {
                 recomputeDayCount(removedDate || targetDate);
             });
         };
+
         if (useLocal) {
             const t = getLocalTask(taskId);
             deleteLocalTask(taskId);
             after(t ? t.task_date : targetDate);
             return;
         }
-        fetch('api/tasks.php', { method: 'DELETE', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id: taskId }) })
-            .then(r => { if(!r.ok) throw new Error(); return r.json(); })
-            .then(()=> after(targetDate))
-            .catch(()=> alert('Error deleting task.'));
+
+        // Create a proper payload with the ID explicitly as number if possible
+        let taskIdValue = taskId;
+        if (typeof taskId === 'string') {
+            taskIdValue = parseInt(taskId, 10);
+            // If parsing failed, revert to original string value
+            if (isNaN(taskIdValue)) {
+                taskIdValue = taskId;
+            }
+        }
+
+        const payload = { id: taskIdValue };
+        console.log('Sending delete request with payload:', payload);
+
+        fetch('api/tasks.php', {
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        })
+            .then(r => {
+                if(!r.ok) {
+                    console.error('Server returned error status:', r.status);
+                    throw new Error('Server error: ' + r.status);
+                }
+                return r.json();
+            })
+            .then(result => {
+                console.log('Delete successful:', result);
+                after(targetDate);
+            })
+            .catch(err => {
+                console.error('Failed to delete task:', err);
+                alert('Error deleting task. Please try again.');
+            });
     }
 });

@@ -266,7 +266,11 @@ function deleteTask() {
             return;
         }
 
+        // Ensure taskId is properly cast to integer
         $taskId = (int)$data['id'];
+
+        // Log the ID we're attempting to delete
+        error_log('Attempting to delete task with ID: ' . $taskId);
 
         // Check if task exists
         $stmt = $db->prepare("SELECT id FROM tasks WHERE id = ?");
@@ -276,15 +280,18 @@ function deleteTask() {
             return;
         }
 
-        // Delete the task
+        // Delete the task - ensure we're using a specific ID
         $stmt = $db->prepare("DELETE FROM tasks WHERE id = ?");
         $stmt->execute([$taskId]);
 
-        sendResponse(200, ['message' => 'Task deleted successfully']);
+        // Check how many rows were affected
+        $rowCount = $stmt->rowCount();
+        error_log('Deleted ' . $rowCount . ' rows with task ID: ' . $taskId);
+
+        sendResponse(200, ['message' => 'Task deleted successfully', 'id' => $taskId]);
 
     } catch (Exception $e) {
         error_log('Error deleting task: ' . $e->getMessage());
-        sendResponse(500, ['error' => 'Failed to delete task']);
+        sendResponse(500, ['error' => 'Failed to delete task: ' . $e->getMessage()]);
     }
 }
-

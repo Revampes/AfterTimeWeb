@@ -38,8 +38,8 @@
     <nav>
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="aftertimefault.html" class="active">AfterTimeFault</a></li>
-            <li><a href="calendar.html">Calendar</a></li>
+            <li><a href="aftertimefault.html">AfterTimeFault</a></li>
+            <li><a href="calendar.html" class="active">Calendar</a></li>
         </ul>
     </nav>
 </div>
@@ -48,8 +48,8 @@
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <a href="index.html">Home</a>
-    <a href="aftertimefault.html" class="active">AfterTimeFault</a>
-    <a href="calendar.html">Calendar</a>
+    <a href="aftertimefault.html">AfterTimeFault</a>
+    <a href="calendar.html" class="active">Calendar</a>
 </div>
 
 <span class="open-nav-btn" onclick="openNav()">☰ Menu</span>
@@ -82,8 +82,7 @@
                 <h3 id="selected-date">No date selected</h3>
                 <div style="display:flex;gap:.5rem;align-items:center;">
                     <span id="storage-mode" style="font-size:.7rem;padding:2px 6px;border:1px solid var(--accent-color,#0ff);border-radius:12px;opacity:.7;">MODE?</span>
-                    <button id="add-task" class="task-button" disabled>+ Add Task</button>
-                    <button id="add-multi-task" class="task-button" disabled style="white-space:nowrap;">+ Add Multi-Day</button>
+                    <button id="add-multi-task" class="task-button" disabled style="white-space:nowrap;">+ Add Task(s)</button>
                 </div>
             </div>
             <div id="daily-schedule-container" style="display:none;">
@@ -140,6 +139,7 @@
             <span class="close-multi-modal">&times;</span>
             <h3>Add Task To Multiple Days</h3>
             <form id="multi-task-form">
+                <input type="hidden" id="multi-task-id">
                 <div class="form-group">
                     <label for="multi-task-title">Title:</label>
                     <input type="text" id="multi-task-title" required>
@@ -156,21 +156,34 @@
                     <label for="multi-task-description">Description:</label>
                     <textarea id="multi-task-description" rows="4"></textarea>
                 </div>
-                <div class="form-group" style="display:flex;gap:1rem;flex-wrap:wrap;">
-                    <div style="flex:1;min-width:160px;">
-                        <label for="multi-start-date">Start Date:</label>
-                        <input type="date" id="multi-start-date" required>
+                <div class="form-group">
+                    <label>Select Dates:</label>
+                    <div id="multi-day-selector" class="multi-day-selector">
+                        <div class="multi-day-selector-header">
+                            <button type="button" id="multi-prev-month" class="mini-nav-button">&lt;</button>
+                            <div id="multi-month-year">September 2025</div>
+                            <button type="button" id="multi-next-month" class="mini-nav-button">&gt;</button>
+                        </div>
+                        <div class="multi-day-grid">
+                            <div class="mini-weekday-header">Su</div>
+                            <div class="mini-weekday-header">Mo</div>
+                            <div class="mini-weekday-header">Tu</div>
+                            <div class="mini-weekday-header">We</div>
+                            <div class="mini-weekday-header">Th</div>
+                            <div class="mini-weekday-header">Fr</div>
+                            <div class="mini-weekday-header">Sa</div>
+                            <!-- Days will be filled dynamically -->
+                        </div>
+                        <div class="multi-day-actions">
+                            <button type="button" id="select-all-visible" class="mini-action-button">Select All Visible</button>
+                            <button type="button" id="clear-selection" class="mini-action-button">Clear Selection</button>
+                        </div>
+                        <div class="selected-dates-count"><span id="selected-dates-count">0</span> dates selected</div>
                     </div>
-                    <div style="flex:1;min-width:160px;">
-                        <label for="multi-end-date">End Date:</label>
-                        <input type="date" id="multi-end-date" required>
-                    </div>
-                </div>
-                <div class="form-group" style="font-size:.75rem;opacity:.75;">
-                    All days in the range (inclusive) will get an identical task. Limit 200 days per batch.
+                    <input type="hidden" id="selected-dates" name="selected-dates">
                 </div>
                 <div class="form-actions">
-                    <button type="submit" class="save-button">Save All</button>
+                    <button type="submit" class="save-button">Save to Selected Days</button>
                     <button type="button" id="cancel-multi-button" class="cancel-button">Cancel</button>
                 </div>
             </form>
