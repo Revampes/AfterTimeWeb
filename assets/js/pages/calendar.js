@@ -18,12 +18,68 @@ document.addEventListener('DOMContentLoaded', function() {
     const taskForm = document.getElementById('task-form');
     const dailyScheduleContainer = document.getElementById('daily-schedule-container');
     const dailySchedule = document.getElementById('daily-schedule');
+    const manageList = document.getElementById('manage-list');
 
-    // Current date tracking
+    // --- restored date tracking (needed for rendering) ---
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth();
     let currentYear = currentDate.getFullYear();
     let selectedDate = null;
+
+    // Fallback mode flag (true => use localStorage instead of API)
+    let useLocal = false;
+    const LS_KEY = 'aftertime_tasks_v1';
+
+    // ---------------- Local Storage Helpers ----------------
+    function loadAllLocal() {
+        try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch { return []; }
+    }
+    function saveAllLocal(tasks) { localStorage.setItem(LS_KEY, JSON.stringify(tasks)); }
+    function getLocalTasksByDate(date) { return loadAllLocal().filter(t => t.task_date === date); }
+    function getLocalTask(id) { return loadAllLocal().find(t => String(t.id) === String(id)); }
+    function createLocalTask(data) {
+        const tasks = loadAllLocal();
+        const id = Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+        const task = { id, ...data };
+        tasks.push(task); saveAllLocal(tasks); return task;
+    }
+    function updateLocalTask(data) {
+        const tasks = loadAllLocal();
+        const idx = tasks.findIndex(t => String(t.id) === String(data.id));
+        if (idx !== -1) { tasks[idx] = { ...tasks[idx], ...data }; saveAllLocal(tasks); return tasks[idx]; }
+        return null;
+    }
+    function deleteLocalTask(id) {
+        const tasks = loadAllLocal().filter(t => String(t.id) !== String(id));
+        saveAllLocal(tasks);
+    }
+
+    // Health check to decide API vs local
+    (function detectBackend(){
+        fetch('api/tasks.php?health=1', { cache: 'no-store' })
+            .then(r => r.json())
+            .then(() => {
+                useLocal = false;
+                updateModeBadge();
+                // Ensure counts are loaded after mode is determined
+                refreshDayCounts(currentYear, currentMonth);
+            })
+            .catch(() => {
+                useLocal = true;
+                updateModeBadge();
+                console.info('[Calendar] API not available – using localStorage mode.');
+                // Also load counts in local mode
+                refreshDayCounts(currentYear, currentMonth);
+            });
+    })();
+
+    const modeBadge = document.getElementById('storage-mode');
+    function updateModeBadge(){
+        if(!modeBadge) return;
+        modeBadge.textContent = useLocal ? 'LOCAL' : 'SERVER';
+        modeBadge.style.background = useLocal ? 'rgba(255,165,0,.15)' : 'rgba(0,255,170,.15)';
+        modeBadge.style.color = useLocal ? '#ffa500' : '#00ffc8';
+    }
 
     // Initialize calendar and event listeners
     initCalendar();
@@ -33,6 +89,19 @@ document.addEventListener('DOMContentLoaded', function() {
         renderCalendar(currentMonth, currentYear);
         setupEventListeners();
         initDailySchedule();
+        setTimeout(autoSelectToday, 200); // Added delay to ensure calendar is fully rendered first
+    }
+
+    function autoSelectToday() {
+        const today = new Date();
+        if (today.getMonth() === currentMonth && today.getFullYear() === currentYear) {
+            const dateString = `${today.getFullYear()}-${(today.getMonth()+1).toString().padStart(2,'0')}-${today.getDate().toString().padStart(2,'0')}`;
+            const dayEl = calendarGrid.querySelector(`.calendar-day[data-date="${dateString}"]:not(.other-month)`);
+            if (dayEl) {
+                console.log("Auto-selecting today:", dateString);
+                selectDate(dateString, dayEl);
+            }
+        }
     }
 
     // Set up all event listeners
@@ -121,6 +190,69 @@ document.addEventListener('DOMContentLoaded', function() {
                 createDayElement(i, nextMonth, nextYear, true);
             }
         }
+        // After building the month, update counts
+        refreshDayCounts(year, month);
+    }
+
+    function refreshDayCounts(year, month) {
+        const monthIndex = month; // 0-based
+        const y = year;
+        if (useLocal) {
+            const all = loadAllLocal();
+            const counts = {};
+            all.forEach(t => {
+                if (!t.task_date) return;
+                const [yy, mm, dd] = t.task_date.split('-');
+                if (parseInt(yy) === y && (parseInt(mm) - 1) === monthIndex) {
+                    counts[t.task_date] = (counts[t.task_date] || 0) + 1;
+                }
+            });
+            applyCounts(counts);
+            return;
+        }
+        // Server mode
+        fetch(`api/tasks.php?counts=1&year=${y}&month=${monthIndex + 1}`)
+            .then(r => { if(!r.ok) throw new Error(); return r.json(); })
+            .then(counts => applyCounts(counts))
+            .catch(() => { /* ignore on failure */ });
+    }
+
+    function applyCounts(countsObj) {
+        const dayEls = calendarGrid.querySelectorAll('.calendar-day');
+        dayEls.forEach(el => {
+            const date = el.dataset.date;
+            const count = countsObj && countsObj[date] ? countsObj[date] : 0;
+            const badge = el.querySelector('.events-count');
+            if (badge) {
+                badge.dataset.count = String(count);
+                badge.textContent = count > 0 ? count : '';
+            }
+        });
+    }
+
+    function updateDayBadge(date, count){
+        const badge = calendarGrid.querySelector(`.calendar-day[data-date="${date}"] .events-count`);
+        if (!badge) return;
+        badge.textContent = count > 0 ? count : '';
+        badge.dataset.count = String(count);
+    }
+    function recomputeDayCount(date){
+        if (!date) return;
+        if (useLocal){
+            const n = getLocalTasksByDate(date).length;
+            updateDayBadge(date, n);
+            return;
+        }
+        // If currently selected date equals date, we already have tasks in the panel
+        if (selectedDate === date){
+            const n = tasksContainer.querySelectorAll('.task-item').length;
+            updateDayBadge(date, n);
+            return;
+        }
+        fetch(`api/tasks.php?date=${date}`)
+            .then(r=> r.ok ? r.json(): [])
+            .then(list => updateDayBadge(date, Array.isArray(list)? list.length:0))
+            .catch(()=>{});
     }
 
     // Create a single day element for the calendar
@@ -223,72 +355,49 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Render events in the daily schedule
     function renderDailySchedule(dateString) {
-        // Clear any existing events
         const existingEvents = dailySchedule.querySelectorAll('.scheduled-event');
         existingEvents.forEach(event => event.remove());
-
-        // Get tasks for this date and place them in schedule
+        if (useLocal) { placeTasks(getLocalTasksByDate(dateString)); return; }
         fetch(`api/tasks.php?date=${dateString}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(tasks => {
-                placeTasks(tasks);
-            })
-            .catch(error => {
-                console.error('Error fetching tasks:', error);
-                // Will be handled by the tasks fetch
-            });
+            .then(r => { if(!r.ok) throw new Error(); return r.json(); })
+            .then(tasks => placeTasks(tasks))
+            .catch(() => {});
     }
 
     // Place tasks on the daily schedule
     function placeTasks(tasks) {
         if (!tasks || tasks.length === 0) return;
-
         tasks.forEach(task => {
-            // Skip tasks without time
             if (!task.task_time) return;
-
-            // Get start and end times
             const startTime = task.task_time;
-            const endTime = task.end_time || addHourToTime(startTime); // Default to 1 hour if no end time
-
-            // Parse hours and calculate position
+            const endTime = task.end_time || addHourToTime(startTime);
             const [startHour, startMinute] = startTime.split(':').map(Number);
             const [endHour, endMinute] = endTime.split(':').map(Number);
-
-            // Calculate percentage positions for precise placement
             const startPercent = (startHour + startMinute / 60) / 24 * 100;
             const endPercent = (endHour + endMinute / 60) / 24 * 100;
             const durationPercent = endPercent - startPercent;
-
-            // Create event element
             const eventEl = document.createElement('div');
             eventEl.className = 'scheduled-event';
             eventEl.dataset.id = task.id;
             eventEl.style.top = `${startPercent}%`;
             eventEl.style.height = `${durationPercent}%`;
-
-            // Add event content
+            eventEl.style.left = '0';
+            eventEl.style.right = '0.5rem';
+            const delBtn = document.createElement('button');
+            delBtn.className = 'scheduled-event-delete';
+            delBtn.type = 'button';
+            delBtn.textContent = '×';
+            delBtn.addEventListener('click',(ev)=>{ ev.stopPropagation(); if(confirm('Delete this task?')) deleteTaskFromServer(task.id); });
             const titleEl = document.createElement('div');
             titleEl.className = 'scheduled-event-title';
             titleEl.textContent = task.title;
-
             const timeEl = document.createElement('div');
             timeEl.className = 'scheduled-event-time';
             timeEl.textContent = formatTimeRange(startTime, endTime);
-
+            eventEl.appendChild(delBtn);
             eventEl.appendChild(titleEl);
             eventEl.appendChild(timeEl);
-
-            // Add click handler to edit
-            eventEl.addEventListener('click', () => {
-                openEditTaskModal(task.id);
-            });
-
+            eventEl.addEventListener('click', () => { openEditTaskModal(task.id); });
             dailySchedule.appendChild(eventEl);
         });
     }
@@ -312,27 +421,94 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${newHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
     }
 
+    // Update manage list for the selected date
+    function updateManageList(tasks) {
+        if (!manageList) return;
+        if (!selectedDate) { manageList.innerHTML = 'Select a date'; return; }
+        if (!tasks || tasks.length === 0) {
+            manageList.innerHTML = '<div class="manage-empty">No activities</div>';
+            return;
+        }
+        // Sort by time (null times last)
+        tasks.sort((a,b)=>{
+            if(!a.task_time && !b.task_time) return 0;
+            if(!a.task_time) return 1;
+            if(!b.task_time) return -1;
+            return a.task_time.localeCompare(b.task_time);
+        });
+        manageList.innerHTML = tasks.map(t => {
+            const timeStr = t.task_time ? (t.end_time ? `${t.task_time} - ${t.end_time}` : t.task_time) : '—';
+            return `<div class="manage-item" data-id="${t.id}">
+                        <div class="manage-item-title">${t.title || '(No title)'}</div>
+                        <div class="manage-item-time">${timeStr}</div>
+                        <div class="manage-item-actions">
+                            <button class="manage-btn" data-act="edit" data-id="${t.id}">EDIT</button>
+                            <button class="manage-btn delete" data-act="del" data-id="${t.id}">DEL</button>
+                        </div>
+                    </div>`;
+        }).join('');
+        // Attach listeners (event delegation)
+        manageList.querySelectorAll('.manage-btn').forEach(btn => {
+            btn.addEventListener('click', (e)=>{
+                const id = e.currentTarget.getAttribute('data-id');
+                const act = e.currentTarget.getAttribute('data-act');
+                if (act === 'edit') {
+                    openEditTaskModal(id);
+                } else if (act === 'del') {
+                    if (confirm('Delete this task?')) deleteTaskFromServer(id);
+                }
+            });
+        });
+    }
+
     // Fetch tasks for a specific date
     function fetchTasks(date) {
-        // Show loading state
-        tasksContainer.innerHTML = '<p class="loading">Loading tasks...</p>';
+        return new Promise(resolve => {
+            // Clear any existing tasks first to prevent duplicates
+            tasksContainer.innerHTML = '<p class="loading">Loading tasks...</p>';
 
-        // Make API request to get tasks
-        fetch(`api/tasks.php?date=${date}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(tasks => {
+            if (useLocal) {
+                const tasks = getLocalTasksByDate(date);
                 displayTasks(tasks);
-            })
-            .catch(error => {
-                console.error('Error fetching tasks:', error);
-                // Show empty state
-                tasksContainer.innerHTML = '<p class="no-tasks-message">No tasks for this date</p>';
-            });
+                placeTasks(tasks);
+                updateManageList(tasks);
+                if (selectedDate === date) updateDayBadge(date, tasks.length);
+                resolve(tasks);
+                return;
+            }
+
+            fetch(`api/tasks.php?date=${date}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Network');
+                    return response.json();
+                })
+                .then(tasks => {
+                    // Always clear existing tasks first
+                    tasksContainer.innerHTML = '';
+
+                    // Display the tasks
+                    displayTasks(tasks);
+
+                    // Clear and re-render daily schedule
+                    const existingEvents = dailySchedule.querySelectorAll('.scheduled-event');
+                    existingEvents.forEach(event => event.remove());
+                    placeTasks(tasks);
+
+                    // Update management list
+                    updateManageList(tasks);
+
+                    // Update badge count
+                    if (selectedDate === date) updateDayBadge(date, tasks.length);
+
+                    resolve(tasks);
+                })
+                .catch(() => {
+                    tasksContainer.innerHTML = '<p class="no-tasks-message">No tasks for this date</p>';
+                    updateManageList([]);
+                    if (selectedDate === date) updateDayBadge(date, 0);
+                    resolve([]);
+                });
+        });
     }
 
     // Display tasks in the tasks panel
@@ -394,48 +570,45 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Open task modal for adding a new task
     function openTaskModal() {
-        if (!selectedDate) {
-            alert('Please select a date first');
-            return;
-        }
-
-        // Reset form
+        if (!selectedDate) { alert('Please select a date first'); return; }
         taskForm.reset();
         document.querySelector('#modal-title').textContent = 'Add Task';
         document.getElementById('task-id').value = '';
         document.getElementById('task-date').value = selectedDate;
-
-        // Show modal
+        document.getElementById('original-task-date').value = '';
         taskModal.style.display = 'block';
     }
 
     // Open task modal for editing an existing task
     function openEditTaskModal(taskId) {
-        // Make API request to get task details
+        if (useLocal) {
+            const task = getLocalTask(taskId);
+            if(!task){ alert('Task not found'); return; }
+            document.querySelector('#modal-title').textContent = 'Edit Task';
+            document.getElementById('task-id').value = task.id;
+            document.getElementById('task-date').value = task.task_date;
+            document.getElementById('original-task-date').value = task.task_date; // track old date
+            document.getElementById('task-title').value = task.title;
+            document.getElementById('task-time').value = task.task_time || '';
+            document.getElementById('task-end-time').value = task.end_time || '';
+            document.getElementById('task-description').value = task.description || '';
+            taskModal.style.display = 'block';
+            return;
+        }
         fetch(`api/tasks.php?id=${taskId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+            .then(response => { if (!response.ok) throw new Error(); return response.json(); })
             .then(task => {
-                // Populate form
                 document.querySelector('#modal-title').textContent = 'Edit Task';
                 document.getElementById('task-id').value = task.id;
                 document.getElementById('task-date').value = task.task_date;
+                document.getElementById('original-task-date').value = task.task_date;
                 document.getElementById('task-title').value = task.title;
                 document.getElementById('task-time').value = task.task_time || '';
                 document.getElementById('task-end-time').value = task.end_time || '';
                 document.getElementById('task-description').value = task.description || '';
-
-                // Show modal
                 taskModal.style.display = 'block';
             })
-            .catch(error => {
-                console.error('Error fetching task details:', error);
-                alert('Error loading task details. Please try again.');
-            });
+            .catch(() => alert('Error loading task details.'));
     }
 
     // Close task modal
@@ -446,86 +619,67 @@ document.addEventListener('DOMContentLoaded', function() {
     // Save task (create new or update existing)
     function saveTask(e) {
         e.preventDefault();
-
         const taskId = document.getElementById('task-id').value;
         const date = document.getElementById('task-date').value;
+        const originalDate = document.getElementById('original-task-date').value;
         const title = document.getElementById('task-title').value;
         const startTime = document.getElementById('task-time').value;
         const endTime = document.getElementById('task-end-time').value;
         const description = document.getElementById('task-description').value;
-
-        // Validate time range if both are provided
-        if (startTime && endTime && startTime >= endTime) {
-            alert('End time must be after start time');
+        if (!title) { alert('Title required'); return; }
+        if (startTime && endTime && startTime >= endTime) { alert('End time must be after start time'); return; }
+        const taskData = { id: taskId || null, title, task_date: date, task_time: startTime || null, end_time: endTime || null, description: description || null };
+        const isEdit = !!taskId;
+        const finalize = () => {
+            fetchTasks(date).then(tasks => {
+                renderDailySchedule(date);
+                if (isEdit && originalDate && originalDate !== date) recomputeDayCount(originalDate);
+                // Direct badge update with fetched tasks length
+                updateDayBadge(date, tasks.length);
+            });
+            closeTaskModal();
+        };
+        if (useLocal) {
+            if (isEdit) updateLocalTask({ id: taskId, ...taskData }); else createLocalTask(taskData);
+            finalize();
             return;
         }
-
-        // Prepare task data
-        const taskData = {
-            id: taskId || null,
-            title: title,
-            task_date: date,
-            task_time: startTime || null,
-            end_time: endTime || null,
-            description: description || null
-        };
-
-        // Determine if this is a create or update
-        const method = taskId ? 'PUT' : 'POST';
-        const url = 'api/tasks.php';
-
-        // Send request to server
-        fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json'
-            },
+        const method = isEdit ? 'PUT' : 'POST';
+        fetch('api/tasks.php', {
+            method,
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(taskData)
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Refresh tasks display
-            fetchTasks(date);
-            renderDailySchedule(date);
-
-            // Close modal
-            closeTaskModal();
-        })
-        .catch(error => {
-            console.error('Error saving task:', error);
-            alert('Error saving task. Please try again.');
-        });
+            .then(r => { if(!r.ok) throw new Error(); return r.json(); })
+            .then(() => finalize())
+            .catch(() => {
+                // Fallback to local mode on error
+                useLocal = true; updateModeBadge();
+                if (isEdit) updateLocalTask({ id: taskId, ...taskData }); else createLocalTask(taskData);
+                finalize();
+                alert('Server unavailable – saved locally.');
+            });
     }
 
     // Delete task from server
     function deleteTaskFromServer(taskId) {
-        // Send delete request
-        fetch('api/tasks.php', {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ id: taskId })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Refresh tasks display
-            fetchTasks(selectedDate);
-            renderDailySchedule(selectedDate);
-        })
-        .catch(error => {
-            console.error('Error deleting task:', error);
-            alert('Error deleting task. Please try again.');
-        });
+        const targetDate = selectedDate;
+        const after = (removedDate) => {
+            fetchTasks(targetDate).then(tasks => {
+                renderDailySchedule(targetDate);
+                updateDayBadge(targetDate, tasks.length);
+                recomputeDayCount(removedDate || targetDate);
+            });
+        };
+        if (useLocal) {
+            const t = getLocalTask(taskId);
+            deleteLocalTask(taskId);
+            after(t ? t.task_date : targetDate);
+            return;
+        }
+        fetch('api/tasks.php', { method: 'DELETE', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id: taskId }) })
+            .then(r => { if(!r.ok) throw new Error(); return r.json(); })
+            .then(()=> after(targetDate))
+            .catch(()=> alert('Error deleting task.'));
     }
 });

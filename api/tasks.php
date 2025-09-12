@@ -26,6 +26,11 @@ if (!$db) {
     exit;
 }
 
+// Health check
+if (isset($_GET['health'])) {
+    sendResponse(200, ['status' => 'ok']);
+}
+
 // Route the request based on HTTP method
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -156,8 +161,8 @@ function createTask() {
 
         // Prepare SQL statement
         $stmt = $db->prepare("
-            INSERT INTO tasks (title, description, task_date, task_time, user_id)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO tasks (title, description, task_date, task_time, end_time, user_id)
+            VALUES (?,?,?,?,?,?)
         ");
 
         // Execute with data
@@ -166,6 +171,7 @@ function createTask() {
             $data['description'] ?? null,
             $data['task_date'],
             $data['task_time'] ?? null,
+            $data['end_time'] ?? null,
             $data['user_id'] ?? null
         ]);
 
@@ -181,7 +187,7 @@ function createTask() {
 
     } catch (Exception $e) {
         error_log('Error creating task: ' . $e->getMessage());
-        sendResponse(500, ['error' => 'Failed to create task']);
+        sendResponse(500, ['error' => 'Failed to create task: ' . $e->getMessage()]);
     }
 }
 
@@ -204,9 +210,9 @@ function updateTask() {
         $taskId = (int)$data['id'];
 
         // Check if task exists
-        $stmt = $db->prepare("SELECT id FROM tasks WHERE id = ?");
-        $stmt->execute([$taskId]);
-        if (!$stmt->fetch()) {
+        $chk = $db->prepare("SELECT id FROM tasks WHERE id = ?");
+        $chk->execute([$taskId]);
+        if (!$chk->fetch()) {
             sendResponse(404, ['error' => 'Task not found']);
             return;
         }
@@ -215,32 +221,13 @@ function updateTask() {
         $fields = [];
         $params = [];
 
-        if (isset($data['title'])) {
-            $fields[] = "title = ?";
-            $params[] = $data['title'];
-        }
+        if (array_key_exists('title',$data)) { $fields[]='title=?'; $params[]=$data['title']; }
+        if (array_key_exists('description',$data)) { $fields[]='description=?'; $params[]=$data['description']; }
+        if (array_key_exists('task_date',$data)) { $fields[]='task_date=?'; $params[]=$data['task_date']; }
+        if (array_key_exists('task_time',$data)) { $fields[]='task_time=?'; $params[]=$data['task_time']; }
+        if (array_key_exists('end_time',$data)) { $fields[]='end_time=?'; $params[]=$data['end_time']; }
 
-        if (isset($data['description'])) {
-            $fields[] = "description = ?";
-            $params[] = $data['description'];
-        }
-
-        if (isset($data['task_date'])) {
-            $fields[] = "task_date = ?";
-            $params[] = $data['task_date'];
-        }
-
-        if (isset($data['task_time'])) {
-            $fields[] = "task_time = ?";
-            $params[] = $data['task_time'];
-        }
-
-
-            $fields[] = "end_time = ?";
-            $params[] = $data['end_time'];
-        }
         // If no fields to update
-
         if (empty($fields)) {
             sendResponse(400, ['error' => 'No fields to update']);
             return;
@@ -250,22 +237,18 @@ function updateTask() {
         $params[] = $taskId;
 
         // Prepare and execute update statement
-        $sql = "UPDATE tasks SET " . implode(", ", $fields) . " WHERE id = ?";
-        $stmt = $db->prepare($sql);
-        $stmt->execute($params);
+        $sql = 'UPDATE tasks SET '.implode(', ',$fields).' WHERE id = ?';
+        $stmt = $db->prepare($sql); $stmt->execute($params);
 
         // Get updated task
-        $stmt = $db->prepare("SELECT * FROM tasks WHERE id = ?");
-        $stmt->execute([$taskId]);
-        $task = $stmt->fetch();
-
-        sendResponse(200, $task);
+        $stmt = $db->prepare('SELECT * FROM tasks WHERE id = ?'); $stmt->execute([$taskId]);
+        sendResponse(200, $stmt->fetch());
 
     } catch (Exception $e) {
         error_log('Error updating task: ' . $e->getMessage());
-        sendResponse(500, ['error' => 'Failed to update task']);
-}
+        sendResponse(500, ['error' => 'Failed to update task: ' . $e->getMessage()]);
     }
+}
 
 /**
  * Delete a task
@@ -305,4 +288,3 @@ function deleteTask() {
     }
 }
 
-/**
