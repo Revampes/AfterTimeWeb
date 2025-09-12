@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/calendar.css">
     <link rel="stylesheet" href="assets/css/components/sidebar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
 </head>
 <body class="theme-neon">
 
@@ -17,7 +18,7 @@
     <nav class="navbar">
         <div class="nav-brand">
             <a href="index.html">
-                <img src="assets/images/icons/icons.jpg" alt="AfterTime logo" class="site-logo site-logo--transparent" style="height:44px;max-width:180px;width:auto;object-fit:contain;">
+                <img src="assets/images/icons/icons.png" alt="AfterTime logo" class="site-logo site-logo--transparent" style="height:44px;max-width:180px;width:auto;object-fit:contain;">
             </a>
         </div>
 
@@ -25,11 +26,8 @@
             <li><a href="index.html">Home</a></li>
         </ul>
 
-        <div class="nav-toggle">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
+        <!-- New Menu Toggle Button -->
+        <button class="menu-toggle-btn" aria-label="Toggle Menu">☰</button>
     </nav>
 </header>
 
@@ -46,27 +44,24 @@
 
 <!-- Side navigation for mobile -->
 <div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <a href="index.html">Home</a>
     <a href="aftertimefault.html">AfterTimeFault</a>
     <a href="calendar.html" class="active">Calendar</a>
 </div>
 
-<span class="open-nav-btn" onclick="openNav()">☰ Menu</span>
-
     <div id="header-placeholder"></div>
 
     <main class="calendar-container">
-        <div class="calendar-wrapper">
+        <div class="calendar-wrapper" data-aos="fade-up" data-aos-delay="200">
             <div class="calendar-header">
-                <h1>Calendar</h1>
-                <div class="calendar-navigation">
+                <h1 data-aos="fade-in" data-aos-delay="300">Calendar</h1>
+                <div class="calendar-navigation" data-aos="fade-in" data-aos-delay="400">
                     <button id="prev-month" class="nav-button">&lt;</button>
                     <h2 id="month-year">September 2025</h2>
                     <button id="next-month" class="nav-button">&gt;</button>
                 </div>
             </div>
-            <div class="calendar-grid">
+            <div class="calendar-grid" data-aos="fade-up" data-aos-delay="500">
                 <div class="weekday-header">Sun</div>
                 <div class="weekday-header">Mon</div>
                 <div class="weekday-header">Tue</div>
@@ -75,12 +70,15 @@
                 <div class="weekday-header">Fri</div>
                 <div class="weekday-header">Sat</div>
             </div>
+            <div class="today-button-container" data-aos="fade-up" data-aos-delay="600">
+                <button id="jump-to-today" class="today-button">Jump to Today</button>
+            </div>
         </div>
 
-        <div class="task-panel" id="task-panel">
+        <div class="task-panel" id="task-panel" data-aos="fade-up" data-aos-delay="600">
             <div class="task-header">
-                <h3 id="selected-date">No date selected</h3>
-                <div style="display:flex;gap:.5rem;align-items:center;">
+                <h3 id="selected-date" data-aos="fade-in" data-aos-delay="700">No date selected</h3>
+                <div style="display:flex;gap:.5rem;align-items:center;" data-aos="fade-in" data-aos-delay="800">
                     <span id="storage-mode" style="font-size:.7rem;padding:2px 6px;border:1px solid var(--accent-color,#0ff);border-radius:12px;opacity:.7;">MODE?</span>
                     <button id="add-multi-task" class="task-button" disabled style="white-space:nowrap;">+ Add Task(s)</button>
                 </div>
@@ -192,6 +190,15 @@
 
     <div id="footer-placeholder"></div>
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/sidebar.js"></script>
     <script src="assets/js/pages/calendar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+    </script>
 </body>
 </html>

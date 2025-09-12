@@ -25,13 +25,14 @@ main {
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 1002; /* Higher than header to ensure it appears above */
-    top: 0;
+    z-index: 999; /* Adjusted to be below header */
+    top: 60px; /* Start below header */
     left: 0;
     background-color: #111;
     overflow-x: hidden;
-    padding-top: 60px;
+    padding-top: 20px; /* Reduced since we moved below header */
     transition: 0.5s;
+    bottom: 0; /* Ensure it extends to bottom */
 }
 
 .sidenav a {
@@ -100,7 +101,7 @@ main {
 /* Header styles */
 .main-header {
     background-color: var(--dark-bg);
-    padding: 1rem 5%;
+    padding: 0 2%;
     position: fixed;
     top: 0;
     left: 0;
@@ -110,27 +111,35 @@ main {
     width: 100%;
     height: 60px;
     display: flex;
-    align-items: center;
 }
 
 .navbar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    width: 100%;
 }
 
-.nav-brand {
+/* Menu toggle button moved to the left */
+.menu-toggle-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    font-size: 24px;
+    color: #6c5ce7; /* Purple-blue color */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 15px;
+    height: 60px; /* Match header height for vertical centering */
+    transition: color 0.3s;
+    order: -1;/* This makes it appear before other flex items */
+    position: relative;
+    right: -2px; /* Move it 5px to the right */
 }
 
-.nav-brand a {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--accent-purple);
-    text-shadow: 0 0 15px var(--accent-purple);
-    text-decoration: none;
+.menu-toggle-btn:hover {
+    color: #8e44ad; /* Darker purple on hover */
+    text-shadow: 0 0 10px rgba(108, 92, 231, 0.5); /* Add glow effect on hover */
 }
 
 .nav-menu {
@@ -138,10 +147,12 @@ main {
     display: flex;
     margin: 0;
     padding: 0;
+    flex: 1;
+    justify-content: center; /* Center the nav menu items */
 }
 
 .nav-menu li {
-    margin-left: 2rem;
+    margin: 0; /* Remove left margin */
 }
 
 .nav-menu a {
@@ -149,11 +160,9 @@ main {
     text-decoration: none;
     font-weight: 700;
     transition: color 0.3s, text-shadow 0.3s;
-}
-
-.nav-menu a:hover {
-    color: var(--primary-purple);
-    text-shadow: 0 0 10px var(--primary-purple);
+    display: block;
+    padding: 0 1rem; /* Add padding for better touch target */
+    text-align: center; /* Center text within the link */
 }
 
 /* Site logo styling */
@@ -163,13 +172,23 @@ main {
     width: auto;
     object-fit: contain;
     filter: drop-shadow(0 0 10px var(--accent-purple));
+    margin-left: 15px; /* Add margin to position logo to the right */
+    vertical-align: middle; /* Better vertical alignment */
 }
 
 @media (max-width: 1024px) {
-    .site-logo { height: 36px; max-width: 120px; }
+    .site-logo {
+        height: 36px;
+        max-width: 120px;
+        margin-left: 8px; /* Slightly reduced margin for smaller screens */
+    }
 }
 @media (max-width: 700px) {
-    .site-logo { height: 30px; max-width: 110px; }
+    .site-logo {
+        height: 30px;
+        max-width: 110px;
+        margin-left: 5px; /* Even smaller margin for mobile */
+    }
 }
 
 /* Page title styles */
@@ -212,4 +231,3 @@ main {
     top: 74px;
   }
 }
-

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/components/sidebar.css">
     <link rel="stylesheet" href="assets/css/theme-neon.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
 </head>
 <body class="theme-neon home-page">
 <!-- Header -->
@@ -15,7 +16,7 @@
     <nav class="navbar">
         <div class="nav-brand">
             <a href="index.html">
-                <img src="assets/images/icons/icons.jpg" alt="AfterTime logo" class="site-logo site-logo--transparent" style="height:44px;max-width:180px;width:auto;object-fit:contain;">
+                <img src="assets/images/icons/icons.png" alt="AfterTime logo" class="site-logo site-logo--transparent" style="height:44px;max-width:180px;width:auto;object-fit:contain;">
             </a>
         </div>
 
@@ -23,11 +24,8 @@
             <li><a href="index.html">Home</a></li>
         </ul>
 
-        <div class="nav-toggle">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
+        <!-- New Menu Toggle Button -->
+        <button class="menu-toggle-btn" aria-label="Toggle Menu">☰</button>
     </nav>
 </header>
 
@@ -44,13 +42,11 @@
 
 <!-- Side navigation for mobile -->
 <div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <a href="index.html">Home</a>
     <a href="aftertimefault.html">AfterTimeFault</a>
     <a href="calendar.html">Calendar</a>
 </div>
 
-<span class="open-nav-btn" onclick="openNav()">☰ Menu</span>
 
 <main>
     <!-- Enhanced Hero Section inspired by sample -->

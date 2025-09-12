@@ -117,6 +117,12 @@ document.addEventListener('DOMContentLoaded', function() {
         cancelButton.addEventListener('click', closeTaskModal);
         taskForm.addEventListener('submit', saveTask);
 
+        // Add event listener for the "Jump to Today" button
+        const jumpToTodayBtn = document.getElementById('jump-to-today');
+        if (jumpToTodayBtn) {
+            jumpToTodayBtn.addEventListener('click', jumpToToday);
+        }
+
         if (multiTaskBtn) {
             multiTaskBtn.addEventListener('click', openMultiTaskModal);
         }
@@ -139,6 +145,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 closeMultiTaskModal();
             }
         });
+    }
+
+    // Function to jump to today's date
+    function jumpToToday() {
+        const today = new Date();
+
+        // If we're not on the current month/year, navigate there first
+        if (today.getMonth() !== currentMonth || today.getFullYear() !== currentYear) {
+            currentMonth = today.getMonth();
+            currentYear = today.getFullYear();
+            renderCalendar(currentMonth, currentYear);
+        }
+
+        // Now select today's date
+        const dateString = `${today.getFullYear()}-${(today.getMonth()+1).toString().padStart(2,'0')}-${today.getDate().toString().padStart(2,'0')}`;
+        const dayEl = calendarGrid.querySelector(`.calendar-day[data-date="${dateString}"]:not(.other-month)`);
+
+        if (dayEl) {
+            selectDate(dateString, dayEl);
+
+            // Scroll the day element into view if needed
+            dayEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
     }
 
     // Navigate to previous month
@@ -482,11 +511,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }).join('');
         // Attach listeners (event delegation)
         manageList.querySelectorAll('.manage-btn').forEach(btn => {
-            btn.addEventListener('click', (e)=>{
+            btn.addEventListener('click', (e) => {
                 const id = e.currentTarget.getAttribute('data-id');
                 const act = e.currentTarget.getAttribute('data-act');
                 if (act === 'del') {
-                    if (confirm('Delete this task?')) deleteTaskFromServer(id);
+                    confirmDelete((confirmed) => {
+                        if(confirmed) {
+                            deleteTaskFromServer(id);
+                        }
+                    });
                 }
             });
         });
@@ -819,6 +852,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     renderDailySchedule(selectedDate);
                     recomputeDayCount(selectedDate);
                 }
+
+                // Automatically refresh the page after adding multi-tasks
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500); // Short delay to allow changes to be saved first
+
                 return;
             }
 
@@ -1012,5 +1051,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Failed to delete task:', err);
                 alert('Error deleting task. Please try again.');
             });
+    }
+
+    // Custom confirmation handler for delete operations
+    function confirmDelete(callback) {
+        // Simple implementation that uses the standard confirm dialog for now
+        const confirmed = confirm("Delete this task?");
+        callback(confirmed);
     }
 });
