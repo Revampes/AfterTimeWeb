@@ -419,7 +419,10 @@
 .daily-schedule {
     display: flex;
     flex-direction: column;
-    height: 1200px; /* reverted from 1000px */
+    min-height: 1200px;
+    flex: 1; /* Added to make it grow and fill available space */
+    min-width: 0; /* Critical for flex containers to allow children to shrink below content size */
+    width: 100%; /* Ensure it takes full width of its container */
     border-radius: 8px;
     overflow: hidden;
     margin-top: 1rem;
@@ -458,6 +461,9 @@
     cursor: pointer;
     transition: transform 0.2s ease;
     z-index: 10;
+    display: flex;
+    flex-direction: column;
+    min-height: 2.5em; /* Ensure minimum height for content */
 }
 
 .scheduled-event:hover {
@@ -467,10 +473,14 @@
 
 .scheduled-event-title {
     font-weight: 600;
-    white-space: nowrap;
+    white-space: normal; /* Allow text to wrap */
     overflow: hidden;
     text-overflow: ellipsis;
     margin-bottom: 0.25rem;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Show maximum of 2 lines */
+    -webkit-box-orient: vertical;
 }
 
 .scheduled-event-time {
