@@ -13,20 +13,20 @@ img {
     height: auto;
 }
 
-/* Setting h1, h2 and h3 to different pink colors */
-body.theme-neon.aftertimefault-page h1 {
-  color: #ff66b3; /* Bright pink color for h1 */
-  text-shadow: 0 0 8px rgba(255, 102, 179, 0.4);
+/* Neon purple-blue heading styles for theme-neon (replaces previous pinks) */
+body.theme-neon h1 {
+  color: #6C5CE7; /* primary neon purple */
+  text-shadow: 0 0 10px rgba(108,92,231,0.6), 0 0 24px rgba(77,166,255,0.18);
 }
 
-body.theme-neon.aftertimefault-page h2 {
-  color: #ff99cc; /* Lighter pink color for h2 */
-  text-shadow: 0 0 6px rgba(255, 153, 204, 0.3);
+body.theme-neon h2 {
+  color: #7F93FF; /* lighter purple-blue */
+  text-shadow: 0 0 8px rgba(127,147,255,0.5), 0 0 18px rgba(77,166,255,0.14);
 }
 
-body.theme-neon.aftertimefault-page h3 {
-  color: #ffb3da; /* Even lighter pink color for h3 */
-  text-shadow: 0 0 5px rgba(255, 179, 218, 0.25);
+body.theme-neon h3 {
+  color: #9FB7FF; /* subtle neon blue for smaller headings */
+  text-shadow: 0 0 6px rgba(159,183,255,0.45), 0 0 12px rgba(77,166,255,0.12);
 }
 
 /* Keep specific headings with proper contrast */

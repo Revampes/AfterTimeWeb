@@ -136,8 +136,8 @@ footer {
     position: relative;
     overflow: hidden;
     min-height: 60vh;
-    margin-left: -200px; /* Offset sidebar width */
-    padding-left: calc(5% + 200px); /* Add back the sidebar space */
+    margin-left: 0;
+    padding-left: 5%;
 }
 
 .hero-content {
@@ -190,8 +190,8 @@ footer {
     padding-left: 10%;
     padding-right: 10%;
     text-align: center;
-    margin-left: -200px;
-    padding-left: calc(10% + 200px);
+    margin-left: 0;
+    padding-left: 10%;
 }
 
 .features-section h2, .showcase-section h2, .download-section h2 {
@@ -237,8 +237,8 @@ footer {
 .showcase-section {
     padding: 4rem 10%;
     text-align: center;
-    margin-left: -200px;
-    padding-left: calc(10% + 200px);
+    margin-left: 0;
+    padding-left: 10%;
 }
 
 .showcase-container {
@@ -290,8 +290,8 @@ footer {
     padding: 4rem 10%;
     border-top: 1px solid rgba(108, 92, 231, 0.1);
     text-align: center;
-    margin-left: -200px;
-    padding-left: calc(10% + 200px);
+    margin-left: 0;
+    padding-left: 10%;
 }
 
 .download-section p {

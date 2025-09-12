@@ -189,3 +189,19 @@ body.theme-neon .modules-column, body.theme-neon .details-column { background: t
 body.theme-neon .feature-card, body.theme-neon .module-detail { box-shadow: 0 4px 20px -4px rgba(0,0,0,0.6); }
 body.theme-neon .sidebar { background: #181a27; border-right: 1px solid rgba(255,255,255,0.06); }
 body.theme-neon .sidebar a.active { background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); color:#fff; }
+
+/* Global neon purple-blue heading styles for theme-neon */
+body.theme-neon h1 {
+  color: #6C5CE7; /* primary neon purple */
+  text-shadow: 0 0 12px rgba(108,92,231,0.65), 0 0 28px rgba(77,166,255,0.18);
+}
+
+body.theme-neon h2 {
+  color: #7F93FF; /* lighter purple-blue */
+  text-shadow: 0 0 10px rgba(127,147,255,0.55), 0 0 20px rgba(77,166,255,0.12);
+}
+
+body.theme-neon h3 {
+  color: #9FB7FF; /* subtle neon blue for smaller headings */
+  text-shadow: 0 0 8px rgba(159,183,255,0.5), 0 0 14px rgba(77,166,255,0.10);
+}
