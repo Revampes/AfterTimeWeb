@@ -236,11 +236,11 @@ function updateTask() {
         }
 
 
-        if (isset($data['end_time'])) {
             $fields[] = "end_time = ?";
             $params[] = $data['end_time'];
         }
         // If no fields to update
+
         if (empty($fields)) {
             sendResponse(400, ['error' => 'No fields to update']);
             return;
@@ -264,8 +264,8 @@ function updateTask() {
     } catch (Exception $e) {
         error_log('Error updating task: ' . $e->getMessage());
         sendResponse(500, ['error' => 'Failed to update task']);
-        sendResponse(500, ['error' => 'Failed to update task: ' . $e->getMessage()]);
 }
+    }
 
 /**
  * Delete a task
@@ -306,10 +306,3 @@ function deleteTask() {
 }
 
 /**
- * Send JSON response with status code
- */
-function sendResponse($statusCode, $data) {
-    http_response_code($statusCode);
-    echo json_encode($data);
-    exit;
-}
