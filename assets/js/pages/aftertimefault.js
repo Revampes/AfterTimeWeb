@@ -81,7 +81,10 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Dungeon',
       modules: [
         { id: 'leap-announce', title: 'Leap Announce', content: `<p>Announce in party chat that you have leaped to someone with in-game name.</p>` },
-        { id: 'mob-highlighter', title: 'Mob Highlight', content: `<p>Highlights starred mobs with ESP Hitbox through wall.</p>` },
+        { id: 'mob-highlighter', title: 'Mob Highlight', content: `<p>Highlights starred mobs with ESP Hitbox through wall.</p>
+            <div class="image-wrapper">
+                <img src="assets/images/photos/Dungeon/starmobhighlight.png" alt="Star Mob Highlight image">
+            </div>` },
         { id: 'invincible-timer', title: 'Invincible timer', content: `<p>Create a visible ui for player to know the exact time of bonzo/spirit/phoenix cooldown</p>`},
         { id: 'ghost-block', title: 'Floor7 Pre Ghost Block', content: `<p>Automatically create ghost block in f7 boss room for better gaming experience</p>
             <div class="notice-label">
@@ -91,10 +94,36 @@ document.addEventListener('DOMContentLoaded', () => {
                     <li>Instead, there will be ghost block stop you from walking (for more precise mining with dungeonbreaker)</li>
                 </ul>
             </div>
+            <div class="image-wrapper">
+                <img src="assets/images/photos/Dungeon/f7p1.png" alt="Ghost Block image">
+                <img src="assets/images/photos/Dungeon/f7p2.png" alt="Ghost Block image">
+                <img src="assets/images/photos/Dungeon/f7p3.1.png" alt="Ghost Block image">
+                <img src="assets/images/photos/Dungeon/f7p3.2.1.png" alt="Ghost Block image">
+                <img src="assets/images/photos/Dungeon/f7p3.2.2.png" alt="Ghost Block image">
+                <img src="assets/images/photos/Dungeon/f7core.png" alt="Ghost Block image">
+                <img src="assets/images/photos/Dungeon/f7gold.png" alt="Ghost Block image">
+                <img src="assets/images/photos/Dungeon/f7eep5.png" alt="Ghost Block image">
+            </div>
         `},
-        { id: 'key-highlight', title: 'Wither/Blood Key Highlight', content: `<p>Highlights wither and blood key with ESP hitbox through wall.</p>`},
+        { id: 'key-highlight', title: 'Wither/Blood Key Highlight', content: `<p>Highlights wither and blood key with ESP hitbox through wall.</p>
+            <div class="image-wrapper">
+                <img src="assets/images/photos/Dungeon/witherkeyhighlight.png" alt="Wither Key Highlight image">
+                <img src="assets/images/photos/Dungeon/bloodkeyhighlight.png" alt="Blood Key Highlight image">
+            </div>`},
         { id: 'secret-click-highlight', title: 'Secret Click Highlight', content: `<p>Highlights the clicked secret with colored hitbox in dungeon.</p><p>e.g. secret chest, lever and button</p>`},
-        { id: 'custom-terminals-ui', title: 'Custom Terminals UI', content: `<p>Provide a large and clean terminals GUI</p>`},
+        { id: 'custom-terminals-ui', title: 'Custom Terminals UI', content: `<p>Provide a large and clean terminals GUI</p>
+            <div class="image-wrapper">
+                <h3>Colors terminal</h3>
+                <img src="assets/images/photos/Dungeon/colors.png" alt="image">
+                <h3>Melody terminal</h3>
+                <img src="assets/images/photos/Dungeon/melody.png" alt="image">
+                <h3>Numbers terminal</h3>
+                <img src="assets/images/photos/Dungeon/numbers.png" alt="image">
+                <h3>Rubix terminal</h3>
+                <img src="assets/images/photos/Dungeon/rubix.png" alt="image">
+                <h3>Starts with terminal</h3>
+                <img src="assets/images/photos/Dungeon/startswith.png" alt="image">
+            </div>`},
         { id: 'watcher-timer', title: 'Watcher Timer', content: `<p>Notice when mage should clear blood mobs.</p>`},
         { id: 'p3-tick-timer', title: 'Phase three tick timer', content: `<p>Instant death timer for early entering phase3</p>`}
       ]
@@ -103,6 +132,13 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Fishing',
       modules: [
         { id: 'auto-fish', title: 'Auto Fish', content: `<p>Automatically reels and casts your rod.</p>
+            <div class="video-wrapper">
+                  <a class="video-thumb" href="https://youtu.be/NS9oywaLgtA" target="_blank" rel="noopener noreferrer" title="Fast Hotkey Demo">
+                    <img src="https://img.youtube.com/vi/NS9oywaLgtA/hqdefault.jpg" alt="Auto Fish Demo">
+                    <span class="play-overlay">▶</span>
+                  </a>
+            </div>
+            <div class="video-caption">Click the thumbnail to open the video on YouTube</div>
         <br>
         <p>You can toggle these helper functions</p>
         <div class="image-wrapper">
@@ -123,11 +159,20 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="notice-label">
                 <p>Use at your own risk!</p>
             </div>
+            <div class="image-wrapper">
+                <img src="assets/images/photos/render/nodeff.png" alt="No Debuff image">
+            </div>
         `},
         { id: 'full-bright', title: 'Full Bright', content: `<p>Increase gamma value to see SUN everywhere.</p>`},
         { id: 'etherwarp-overlay', title: 'Etherwarp Overlay', content: `<p>Highlight the available block that you're allowed to etherwarp with.</p>`},
-        { id: 'player-esp', title: 'PlayerESP', content: `<p>Generate entitybox to highlight player through wall/block</p>`},
-        { id: 'name-tag', title: 'NameTag', content: `<p>Generate a bigger nametag of player through wall/block</p>`}
+        { id: 'player-esp', title: 'PlayerESP', content: `<p>Generate entitybox to highlight player through wall/block</p>
+            <div class="image-wrapper">
+                <img src="assets/images/photos/render/playeresp.png" alt="Player ESP image">
+            </div>`},
+        { id: 'name-tag', title: 'NameTag', content: `<p>Generate a bigger nametag of player through wall/block</p>
+            <div class="image-wrapper">
+                <img src="assets/images/photos/render/nametag.png" alt="Name Tag image">
+            </div>`}
       ]
     },
     skyblock: {

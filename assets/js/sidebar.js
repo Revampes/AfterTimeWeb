@@ -9,8 +9,10 @@ function toggleSidebar() {
     if (desktopSidebar) {
         if (sidebarOpen) {
             desktopSidebar.classList.add('open');
+            document.body.classList.add('sidebar-open');
         } else {
             desktopSidebar.classList.remove('open');
+            document.body.classList.remove('sidebar-open');
         }
     }
 

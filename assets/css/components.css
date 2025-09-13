@@ -1,9 +1,16 @@
-/* Main content layout with sidebar */
+/* Main content layout with sidebar - Overridden by main.css */
 main {
-    margin-left: 200px;
-    padding: 100px 20px 20px 20px; /* Increased top padding for header */
+    padding: 100px 20px 20px 20px; /* Consistent padding */
     min-height: 100vh;
     background: #f9f9f9;
+    width: 100%;
+    transition: margin-left 0.3s ease;
+    margin-left: 0; /* Default state: no margin */
+}
+
+/* When sidebar is open, add margin */
+body.sidebar-open main {
+    margin-left: 200px; /* Push content when sidebar is open */
 }
 
 @media (max-width: 700px) {
@@ -14,9 +21,14 @@ main {
         box-shadow: none;
         display: none;
     }
+
     main {
+        padding: 80px 10px 10px 10px; /* Adjusted padding for mobile */
+    }
+
+    /* No margin on mobile even when sidebar is open */
+    body.sidebar-open main {
         margin-left: 0;
-        padding: 80px 10px 10px 10px; /* Adjusted for mobile */
     }
 }
 

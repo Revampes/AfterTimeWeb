@@ -29,10 +29,33 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100%; /* Ensure body takes at least full height */
+    margin-left: 0; /* No default left margin */
 }
 
 main {
     flex: 1 0 auto; /* Allow main to grow but not shrink, taking available space */
+    padding: 20px; /* Consistent padding */
+    margin-left: 0; /* No default left margin */
+    max-width: 100%; /* Ensure it can't exceed viewport width */
+    width: 100%; /* Use full width */
+    box-sizing: border-box; /* Include padding in width calculation */
+    transition: margin-left 0.3s ease;
+}
+
+/* Special styling for calendar page */
+body.theme-neon main .calendar-container {
+    padding-top: 60px; /* Give calendar container more top space */
+}
+
+body.sidebar-open main {
+    margin-left: 200px; /* Only add margin when sidebar is open */
+}
+
+/* Only for desktop, not for mobile */
+@media (max-width: 768px) {
+    body.sidebar-open main {
+        margin-left: 0; /* No margin on mobile even with sidebar open */
+    }
 }
 
 /* Footer styles */

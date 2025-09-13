@@ -17,6 +17,23 @@
     left: 0; /* Show sidebar when open class is applied */
 }
 
+/* Main content transition for when sidebar opens/closes */
+body {
+    transition: padding-left 0.3s ease;
+    padding-left: 0; /* Default state with no sidebar padding */
+}
+
+body.sidebar-open {
+    padding-left: 200px; /* Add padding when sidebar is open */
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    body.sidebar-open {
+        padding-left: 0; /* No padding on mobile, since sidebar overlays content */
+    }
+}
+
 .sidebar nav ul {
     list-style: none;
     padding: 0;
