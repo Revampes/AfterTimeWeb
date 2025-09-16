@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AfterTimeFault - Website Name</title>
+    <title>AfterTimeFault - Hypixel Skyblock Mod</title>
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/components/sidebar.css">
     <link rel="stylesheet" href="assets/css/afertimefault/aftertimefault.css">
-    <link rel="stylesheet" href="assets/css/theme-neon.css"><!-- added neon theme -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"><!-- sample font -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"><!-- icons -->
+    <link rel="stylesheet" href="assets/css/theme-neon.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="theme-neon aftertimefault-page">
-<!-- Header -->
 <header class="main-header">
     <nav class="navbar">
         <div class="nav-brand">
@@ -21,17 +20,13 @@
                 <img src="assets/images/icons/icons.png" alt="AfterTime logo" class="site-logo site-logo--transparent" style="height:44px;max-width:180px;width:auto;object-fit:contain;">
             </a>
         </div>
-
         <ul class="nav-menu">
             <li><a href="index.html">Home</a></li>
         </ul>
-
-        <!-- New Menu Toggle Button -->
         <button class="menu-toggle-btn" aria-label="Toggle Menu">☰</button>
     </nav>
 </header>
 
-<!-- Sidebar components -->
 <div class="sidebar">
     <nav>
         <ul>
@@ -42,98 +37,145 @@
     </nav>
 </div>
 
-<!-- Side navigation for mobile -->
 <div id="mySidenav" class="sidenav">
     <a href="index.html">Home</a>
     <a href="aftertimefault.html" class="active">AfterTimeFault</a>
     <a href="calendar.html">Calendar</a>
 </div>
 
-
 <main id="main">
-    <h1 data-aos="fade-in" data-aos-delay="200">AfterTimeFault Mod</h1>
-
-    <section class="hero-blur" data-aos="fade-up" data-aos-delay="400">
-        <img src="assets/images/backgrounds/ModMainPage.png" alt="AfterTimeFault background" class="hero-blur-bg" />
+    <!-- Hero -->
+    <section class="hero-blur atf-hero-fixed" aria-labelledby="hero-title">
+        <img src="assets/images/backgrounds/ModMainPage.png" alt="AfterTimeFault showcase background" class="hero-blur-bg" />
         <div class="hero-blur-overlay">
-            <h2>Looking for SkyBlock Mod?</h2>
-            <p>Get Rat All of You</p>
-        </div>
-    </section>
-
-    <section class="features" data-aos="fade-up" data-aos-delay="600">
-        <div class="feature-card" data-aos="fade-up" data-aos-delay="700">
-            <h2>Creator's Github</h2>
-            <a href="https://github.com/Revampes">AfterTime's Github</a>
-        </div>
-        <div class="feature-card" data-aos="fade-up" data-aos-delay="800">
-            <h2>Download now</h2>
-            <a href="https://github.com/Revampes/AfterTime_Fault/releases/">AfterTimeFault Release</a>
-        </div>
-        <div class="feature-card" data-aos="fade-up" data-aos-delay="900">
-            <h2>Description</h2>
-            <a href="#mod-description" class="scroll-link">View mod's description</a>
-        </div>
-        <div class="feature-card" data-aos="fade-up" data-aos-delay="1000">
-            <h2>Feature List</h2>
-            <a href="#features-showcase" class="scroll-link">View all features</a>
-        </div>
-    </section>
-
-    <h1 id="mod-description" data-aos="fade-in" data-aos-delay="200">Mod's description</h1>
-
-    <!-- Mod description container (restored) -->
-    <section class="mod-description-container" data-aos="fade-up" data-aos-delay="400">
-        <div class="mod-card">
-            <div class="mod-card-header">
-                <h2 class="mod-name">Rat All Of You <span class="mod-version">v2.0</span></h2>
-                <div class="mod-meta">
-                    <span class="mod-creator">Creator: AfterTime</span>
-                    <span class="mod-created">Created: 10/08/2025</span>
-                </div>
+            <h1 id="hero-title">AfterTimeFault</h1>
+            <p class="hero-tagline">The ultimate Hypixel Skyblock mod featuring intelligent automation, performance optimizations, and quality-of-life improvements.</p>
+            <div class="hero-actions">
+                <a class="download-btn" href="https://github.com/Revampes/AfterTime_Fault/releases" target="_blank" rel="noopener">Download Release</a>
             </div>
+        </div>
+    </section>
 
-            <div class="mod-card-body">
-                <p class="mod-summary">Rat All Of You Mod for Hypixel Skyblock. This mod is designed to improve quality of life when grinding Skyblock.</p>
-                <p class="mod-summary">Wipe out all javascripit code! No more Chattrigger! No more lag!</p>
+    <!-- Primary tabs -->
+    <nav class="atf-tabs" aria-label="AfterTimeFault sections" role="tablist">
+        <button class="atf-tab active" role="tab" aria-selected="true" aria-controls="tab-overview" data-tab="overview">Overview</button>
+        <button class="atf-tab" role="tab" aria-selected="false" aria-controls="tab-modules" data-tab="modules">Modules</button>
+        <button class="atf-tab" role="tab" aria-selected="false" aria-controls="tab-install" data-tab="install">Installation</button>
+        <button class="atf-tab" role="tab" aria-selected="false" aria-controls="tab-developer" data-tab="developer">Developer</button>
+    </nav>
 
-                <h4>Main features:</h4>
-                <ul class="mod-features">
-                    <li>Fast Hotkey</li>
-                    <li>Hotbar Swap</li>
-                    <li>Kuudra</li>
-                    <li>Dungeon non depth check highlight</li>
+    <div class="tab-panels">
+        <!-- Overview Panel -->
+        <section id="tab-overview" class="tab-panel active" role="tabpanel" aria-labelledby="overview" tabindex="0">
+            <div class="panel-inner">
+                <h2>What is AfterTimeFault?</h2>
+                <p>AfterTimeFault is a modern Hypixel Skyblock client mod focused on practical quality-of-life upgrades, smart automation helpers, high-clarity rendering tweaks, and performance-focused adjustments. Whether you grind Dungeons, Kuudra, Fishing, or general Skyblock progression, the mod bundles modular tools to streamline repetitive interactions while keeping control in the player's hands.</p>
+                <ul class="overview-feature-list">
+                    <li>Category-based modular feature system (enable only what you need)</li>
+                    <li>Smart automation helpers (multiple actions still under your intent)</li>
+                    <li>Combat, utility, rendering & performance modules</li>
+                    <li>Clear visual overlays & custom UI components</li>
+                    <li>Designed to remain lean and responsive</li>
                 </ul>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Categories layout: modules list (left) + category tabs & detail (right) -->
-    <h1 id="features-showcase" data-aos="fade-in" data-aos-delay="200">Features showcase</h1>
-    <div class="categories-layout" data-aos="fade-up" data-aos-delay="400">
-        <!-- Left: modules list for the selected category -->
-        <aside class="modules-column">
-            <h2 id="category-title">Category</h2>
-            <!-- Mobile category tabs (hidden on desktop) -->
-            <div class="category-tabs category-tabs--mobile" id="category-tabs-mobile"></div>
-            <div class="modules-list" id="modules-list">
-                <!-- Module buttons will be generated by JavaScript -->
+        <!-- Modules Panel -->
+        <section id="tab-modules" class="tab-panel" role="tabpanel" aria-labelledby="modules" tabindex="0">
+            <div class="modules-layout">
+                <aside class="filters-panel" aria-label="Module filters">
+                    <h3 class="filters-title">Filters</h3>
+                    <label class="filter-group">
+                        <span>Tag</span>
+                        <select id="module-tag-select" aria-label="Module tag filter">
+                            <option value="all">All Tags</option>
+                            <option value="kuudra">Kuudra</option>
+                            <option value="dungeon">Dungeon</option>
+                            <option value="fishing">Fishing</option>
+                            <option value="render">Render</option>
+                            <option value="skyblock">Skyblock</option>
+                            <option value="performance">Performance</option>
+                            <option value="risk">Use at your own risk</option>
+                            <option value="media">With Image/Video</option>
+                        </select>
+                    </label>
+                    <label class="filter-group">
+                        <span>Search</span>
+                        <input id="module-search" type="text" placeholder="Search modules..." aria-label="Search modules" autocomplete="off">
+                    </label>
+                    <div class="filter-actions">
+                        <button id="reset-filters" type="button" class="reset-btn" aria-label="Reset filters">Reset Filters</button>
+                    </div>
+                </aside>
+                <section class="modules-results" aria-live="polite">
+                    <div id="modules-grid" class="module-grid" data-state="loading" aria-busy="true"></div>
+                    <div id="no-modules-msg" class="no-modules hidden">No modules match your filters.</div>
+                </section>
             </div>
-        </aside>
+        </section>
 
-        <!-- Right: category tabs at top and module detail below (desktop only tabs) -->
-        <section class="details-column">
-            <div class="category-tabs category-tabs--desktop" id="category-tabs">
-                <!-- Category tabs will be generated by JavaScript -->
+        <!-- Installation Panel -->
+        <section id="tab-install" class="tab-panel" role="tabpanel" aria-labelledby="install" tabindex="0">
+            <div class="panel-inner">
+                <h2>Installation</h2>
+                <div class="install-step-container">
+                    <div class="step-box">1</div>
+                    <h3>Download AfterTimeFault</h3>
+                    <p>Get the lastest version from our release page.</p>
+                    <a href="https://github.com/Revampes/AfterTime_Fault/releases">Download Now</a>
+                </div>
+
+                <div class="install-step-container">
+                    <div class="step-box">2</div>
+                    <h3>Install Forge</h3>
+                    <p>Make sure you have the required mod loader installed</p>
+                    <a href="https://files.minecraftforge.net/net/minecraftforge/forge/index_1.8.9.html">Get Forge</a>
+                </div>
+
+                <div class="install-step-container">
+                    <div class="step-box">3</div>
+                    <h3>Add to Mods Folder</h3>
+                    <p>Drag the .jar file into your .minecraft/mods folder</p>
+                </div>
             </div>
+        </section>
 
-            <div class="module-detail" id="module-detail">
-                <h3 id="module-title">Select a module</h3>
-                <div id="module-content">Choose a module on the left to see details here.</div>
+        <!-- Developer Panel -->
+        <section id="tab-developer" class="tab-panel" role="tabpanel" aria-labelledby="developer" tabindex="0">
+            <div class="panel-inner">
+                <h2>Developer & Source</h2>
+                <div class="dev-cards">
+                    <div class="dev-card">
+                        <h3>Primary Developer</h3>
+                        <p><strong>AfterTime (Revampes)</strong></p>
+                        <p>Focused on scalable module architecture & high performance rendering hooks.</p>
+                        <p>
+                            <a href="https://github.com/Revampes" target="_blank" rel="noopener" class="dev-link"><i class="fab fa-github"></i> GitHub Profile</a>
+                        </p>
+                    </div>
+                    <div class="dev-card">
+                        <h3>Source Code</h3>
+                        <p>The project is available on GitHub. Contributions, issue reports, and feature proposals are welcome.</p>
+                        <p><a href="https://github.com/Revampes/AfterTime_Fault" class="dev-link" target="_blank" rel="noopener"><i class="fab fa-github"></i> AfterTime_Fault Repository</a></p>
+                        <p><a href="https://github.com/Revampes/AfterTime_Fault/releases" class="dev-link" target="_blank" rel="noopener"><i class="fa fa-download"></i> Latest Release</a></p>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
 </main>
+
+<!-- Module Details Modal -->
+<div id="module-modal" class="module-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="module-modal-title">
+    <div class="module-modal-backdrop" data-close-modal></div>
+    <div class="module-modal-dialog" role="document">
+        <button class="modal-close" data-close-modal aria-label="Close details">×</button>
+        <div class="modal-content">
+            <h2 id="module-modal-title">Module Title</h2>
+            <div id="module-modal-body" class="modal-body"></div>
+        </div>
+    </div>
+</div>
 
 <footer>
     <p>&copy; 2025 AfterTime's Home. All rights reserved.</p>

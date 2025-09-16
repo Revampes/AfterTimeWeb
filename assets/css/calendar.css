@@ -1,3 +1,4 @@
+/* filepath: c:\Users\user\Downloads\AfterTimeWebPage\assets\css\calendar.css */
 /* Calendar Styles */
 .calendar-container {
     display: flex;
@@ -776,11 +777,11 @@
 
     /* More aggressive fix for scheduled events on mobile */
     .scheduled-event {
-        left: 2.5rem !important; /* Override inline style */
-        right: 5px !important; /* Override inline style */
+        left: 2.5rem !important; /* keep horizontal adjustment */
+        right: 5px !important;
         padding: 0.55rem !important;
-        min-height: 2.5rem !important; /* Force minimum height */
-        height: auto !important; /* Force auto height regardless of inline style */
+        min-height: 2.5rem !important; /* ensure visibility for very short events */
+        /* Removed height:auto override so inline percentage height reflects multi-hour duration */
     }
 
     /* Force proper sizing for extremely short events */
