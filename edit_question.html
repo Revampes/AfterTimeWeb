@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit Question</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/theme-neon.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/components/sidebar.css">
+    <link rel="stylesheet" href="assets/css/components/header.css">
+</head>
+<body class="theme-neon">
+<header class="main-header">
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="index.html"><img src="assets/images/icons/icons.png" alt="AfterTime logo" style="height:44px;"></a>
+        </div>
+        <ul class="nav-menu"></ul>
+        <button class="menu-toggle-btn">☰</button>
+        <a href="login.html" class="login-header-btn">Login</a>
+    </nav>
+</header>
+<div class="sidebar"><nav><ul></ul></nav></div>
+<div id="mySidenav" class="sidenav"></div>
+<main style="padding:2rem;">
+    <h1>Edit Question</h1>
+    <p>This page is accessible to admins and teachers only.</p>
+    <div id="editor-area">
+        <p>Placeholder editor — implement question editing here.</p>
+    </div>
+</main>
+<footer><p>&copy; 2025 AfterTime</p></footer>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/sidebar.js"></script>
+<script src="assets/js/auth.js"></script>
+<script>
+    // Access guard: allow admin and teacher only
+    (function(){
+        try {
+            const role = (localStorage.getItem('role') || '').toLowerCase();
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            if (!isLoggedIn || !['admin','teacher'].includes(role)) {
+                alert('Access denied. Please login with an account authorized to view this page.');
+                window.location.href = 'login.html';
+            }
+        } catch (e) { window.location.href = 'login.html'; }
+    })();
+</script>
+</body>
+</html>
+

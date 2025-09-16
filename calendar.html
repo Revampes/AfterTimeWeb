@@ -194,10 +194,24 @@
     </div>
 
     <div id="footer-placeholder"></div>
+    <script src="assets/js/auth.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/sidebar.js"></script>
     <script src="assets/js/pages/calendar.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Access guard: allow admin, teacher, student
+        (function(){
+            try {
+                const role = (localStorage.getItem('role') || '').toLowerCase();
+                const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+                if (!isLoggedIn || !['admin','teacher','student'].includes(role)) {
+                    alert('Access denied. Please login with an authorized account.');
+                    window.location.href = 'login.html';
+                }
+            } catch (e) { window.location.href = 'login.html'; }
+        })();
+    </script>
     <script>
         AOS.init({
             duration: 800,

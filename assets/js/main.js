@@ -100,19 +100,82 @@ function setActiveSidebarLink() {
 function updateNavForLogin() {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     const username = localStorage.getItem('username') || '';
-    // Header
-    const navMenu = document.querySelector('.nav-menu');
-    const loginBtn = document.querySelector('.login-header-btn');
-    if (navMenu) {
-        navMenu.innerHTML = '';
-        // Always show Home
-        navMenu.innerHTML += '<li><a href="index.html">Home</a></li>';
-        if (isLoggedIn) {
-            navMenu.innerHTML += '<li><a href="aftertimefault.html">AfterTimeFault</a></li>';
-            navMenu.innerHTML += '<li><a href="calendar.html">Calendar</a></li>';
+    const role = (localStorage.getItem('role') || '').toLowerCase();
+
+    // Decide links based on role
+    const baseLinks = [{ label: 'Home', href: 'index.html' }];
+    let roleLinks = [];
+    if (isLoggedIn) {
+        if (role === 'admin') {
+            roleLinks = [
+                { label: 'AfterTimeFault', href: 'aftertimefault.html' },
+                { label: 'Calendar', href: 'calendar.html' },
+                { label: 'Chem Question', href: 'chem_question.html' },
+                { label: 'Edit Question', href: 'edit_question.html' }
+            ];
+        } else if (role === 'teacher') {
+            roleLinks = [
+                { label: 'AfterTimeFault', href: 'aftertimefault.html' },
+                { label: 'Calendar', href: 'calendar.html' }
+            ];
+        } else if (role === 'student') {
+            roleLinks = [
+                { label: 'Calendar', href: 'calendar.html' },
+                { label: 'Chem Question', href: 'chem_question.html' }
+            ];
         }
     }
-    // Login/Hello button
+
+    const links = baseLinks.concat(roleLinks);
+
+    // Helper to fill UL container
+    function fillUl(ul) {
+        if (!ul) return;
+        ul.innerHTML = '';
+        links.forEach(l => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = l.href;
+            a.textContent = l.label;
+            // mark active when current
+            try {
+                const current = window.location.pathname.split('/').pop() || 'index.html';
+                const linkFile = l.href.split('/').pop();
+                if (linkFile === current) a.classList.add('active');
+            } catch (e) { /* ignore */ }
+            li.appendChild(a);
+            ul.appendChild(li);
+        });
+    }
+
+    // Helper to fill mobile sidenav (no li)
+    function fillNav(container) {
+        if (!container) return;
+        container.innerHTML = '';
+        links.forEach(l => {
+            const a = document.createElement('a');
+            a.href = l.href;
+            a.textContent = l.label;
+            try {
+                const current = window.location.pathname.split('/').pop() || 'index.html';
+                const linkFile = l.href.split('/').pop();
+                if (linkFile === current) a.classList.add('active');
+            } catch (e) { /* ignore */ }
+            container.appendChild(a);
+        });
+    }
+
+    // Populate header, sidebar, mobile
+    const navMenu = document.querySelector('.nav-menu');
+    const sidebarNav = document.querySelector('.sidebar nav ul');
+    const mobileSidenav = document.getElementById('mySidenav');
+
+    fillUl(navMenu);
+    fillUl(sidebarNav);
+    fillNav(mobileSidenav);
+
+    // Login button behaviour (ensure role removed on logout)
+    const loginBtn = document.querySelector('.login-header-btn');
     if (loginBtn) {
         if (isLoggedIn) {
             loginBtn.textContent = `Hello, ${username}`;
@@ -122,6 +185,7 @@ function updateNavForLogin() {
                 if (confirm('Logout?')) {
                     localStorage.removeItem('isLoggedIn');
                     localStorage.removeItem('username');
+                    localStorage.removeItem('role');
                     window.location.reload();
                 }
             };
@@ -131,26 +195,9 @@ function updateNavForLogin() {
             loginBtn.onclick = null;
         }
     }
-    // Sidebar
-    const sidebarNav = document.querySelector('.sidebar nav ul');
-    if (sidebarNav) {
-        sidebarNav.innerHTML = '';
-        sidebarNav.innerHTML += '<li><a href="index.html" class="active">Home</a></li>';
-        if (isLoggedIn) {
-            sidebarNav.innerHTML += '<li><a href="aftertimefault.html">AfterTimeFault</a></li>';
-            sidebarNav.innerHTML += '<li><a href="calendar.html">Calendar</a></li>';
-        }
-    }
-    // Mobile sidenav
-    const mobileSidenav = document.getElementById('mySidenav');
-    if (mobileSidenav) {
-        mobileSidenav.innerHTML = '';
-        mobileSidenav.innerHTML += '<a href="index.html">Home</a>';
-        if (isLoggedIn) {
-            mobileSidenav.innerHTML += '<a href="aftertimefault.html">AfterTimeFault</a>';
-            mobileSidenav.innerHTML += '<a href="calendar.html">Calendar</a>';
-        }
-    }
+
+    // Update active link visuals just in case
+    try { setActiveSidebarLink(); } catch (e) { /* ignore */ }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
