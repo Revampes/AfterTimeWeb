@@ -1,1 +1,1 @@
-[None](https://revampes.github.io/AfterTimeWeb/)
+https://revampes.github.io/AfterTimeWeb/

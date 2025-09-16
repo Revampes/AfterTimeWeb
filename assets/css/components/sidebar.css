@@ -8,7 +8,7 @@
     background: #222;
     color: #fff;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    z-index: 950; /* Higher than header but lower than mobile nav */
+    z-index: 800; /* Increased to ensure sidebar is above all content */
     overflow-y: auto;
     transition: left 0.3s ease; /* Smooth transition */
 }
@@ -19,12 +19,28 @@
 
 /* Main content transition for when sidebar opens/closes */
 body {
-    transition: padding-left 0.3s ease;
-    padding-left: 0; /* Default state with no sidebar padding */
+    /* No layout shift when sidebar opens */
 }
 
-body.sidebar-open {
-    padding-left: 200px; /* Add padding when sidebar is open */
+/* Optional backdrop to dim content and capture clicks to close sidebar */
+.sidebar-backdrop {
+    position: fixed;
+    top: 60px; /* match header */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 750; /* below sidebar (800) */
+    display: none;
+    transition: opacity 0.2s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sidebar-backdrop.visible {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 /* Mobile adjustments */

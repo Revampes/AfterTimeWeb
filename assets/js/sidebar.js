@@ -1,30 +1,67 @@
 // Global variable to track sidebar state
 let sidebarOpen = false;
 
+// Ensure backdrop exists and return it. Backdrop closes the sidebar when clicked.
+function ensureBackdrop() {
+    let backdrop = document.querySelector('.sidebar-backdrop');
+    if (!backdrop) {
+        backdrop = document.createElement('div');
+        backdrop.className = 'sidebar-backdrop';
+        document.body.appendChild(backdrop);
+        backdrop.addEventListener('click', function (e) {
+            e.stopPropagation();
+            closeNav();
+        });
+    }
+    return backdrop;
+}
+
 function toggleSidebar() {
+    const isMobile = window.innerWidth <= 768;
     sidebarOpen = !sidebarOpen;
 
     // For desktop
     const desktopSidebar = document.querySelector('.sidebar');
     if (desktopSidebar) {
-        if (sidebarOpen) {
-            desktopSidebar.classList.add('open');
-            document.body.classList.add('sidebar-open');
+        if (!isMobile) {
+            if (sidebarOpen) {
+                desktopSidebar.classList.add('open');
+                // Show backdrop so sidebar overlays without shifting layout
+                ensureBackdrop().classList.add('visible');
+            } else {
+                desktopSidebar.classList.remove('open');
+                const bp = document.querySelector('.sidebar-backdrop');
+                if (bp) bp.classList.remove('visible');
+            }
         } else {
+            // Always hide desktop sidebar on mobile
             desktopSidebar.classList.remove('open');
-            document.body.classList.remove('sidebar-open');
+            const bp = document.querySelector('.sidebar-backdrop');
+            if (bp) bp.classList.remove('visible');
         }
     }
 
     // For mobile
     const mobileSidebar = document.getElementById('mySidenav');
     if (mobileSidebar) {
-        if (sidebarOpen) {
-            mobileSidebar.style.width = "250px";
-            if (document.getElementById("main")) {
-                document.getElementById("main").classList.add("sidenav-open");
+        if (isMobile) {
+            if (sidebarOpen) {
+                mobileSidebar.style.width = "250px";
+                if (document.getElementById("main")) {
+                    document.getElementById("main").classList.add("sidenav-open");
+                }
+                // mobile can also use backdrop if desired
+                ensureBackdrop().classList.add('visible');
+            } else {
+                mobileSidebar.style.width = "0";
+                if (document.getElementById("main")) {
+                    document.getElementById("main").classList.remove("sidenav-open");
+                }
+                const bp = document.querySelector('.sidebar-backdrop');
+                if (bp) bp.classList.remove('visible');
             }
         } else {
+            // Always hide mobile sidebar on desktop
             mobileSidebar.style.width = "0";
             if (document.getElementById("main")) {
                 document.getElementById("main").classList.remove("sidenav-open");
@@ -62,13 +99,21 @@ window.addEventListener('click', function(event) {
     const sidebar = document.querySelector('.sidebar');
     const toggleBtn = document.querySelector('.menu-toggle-btn');
     const floatBtn = document.getElementById('sidenav-close-floating');
+    const backdrop = document.querySelector('.sidebar-backdrop');
 
+    // If the backdrop exists and the click target is the backdrop, closeNav()
+    if (sidebarOpen && backdrop && event.target === backdrop) {
+        closeNav();
+        return;
+    }
+
+    // Otherwise, for clicks outside the sidebar/sidenav/toggle, close (legacy fallback)
     if (sidebarOpen &&
         event.target !== sidenav &&
         event.target !== sidebar &&
         event.target !== toggleBtn &&
-        !sidenav.contains(event.target) &&
-        !sidebar.contains(event.target) &&
+        !sidenav?.contains(event.target) &&
+        !sidebar?.contains(event.target) &&
         !(toggleBtn && toggleBtn.contains(event.target)) &&
         !(floatBtn && floatBtn.contains(event.target))) {
 

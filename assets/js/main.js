@@ -96,12 +96,70 @@ function setActiveSidebarLink() {
     }
 }
 
-// run on DOMContentLoaded (also present earlier in this file)
-document.addEventListener('DOMContentLoaded', () => {
+// --- Login State & Dynamic Nav ---
+function updateNavForLogin() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const username = localStorage.getItem('username') || '';
+    // Header
+    const navMenu = document.querySelector('.nav-menu');
+    const loginBtn = document.querySelector('.login-header-btn');
+    if (navMenu) {
+        navMenu.innerHTML = '';
+        // Always show Home
+        navMenu.innerHTML += '<li><a href="index.html">Home</a></li>';
+        if (isLoggedIn) {
+            navMenu.innerHTML += '<li><a href="aftertimefault.html">AfterTimeFault</a></li>';
+            navMenu.innerHTML += '<li><a href="calendar.html">Calendar</a></li>';
+        }
+    }
+    // Login/Hello button
+    if (loginBtn) {
+        if (isLoggedIn) {
+            loginBtn.textContent = `Hello, ${username}`;
+            loginBtn.href = '#';
+            loginBtn.onclick = function(e) {
+                e.preventDefault();
+                if (confirm('Logout?')) {
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('username');
+                    window.location.reload();
+                }
+            };
+        } else {
+            loginBtn.textContent = 'Login';
+            loginBtn.href = 'login.html';
+            loginBtn.onclick = null;
+        }
+    }
+    // Sidebar
+    const sidebarNav = document.querySelector('.sidebar nav ul');
+    if (sidebarNav) {
+        sidebarNav.innerHTML = '';
+        sidebarNav.innerHTML += '<li><a href="index.html" class="active">Home</a></li>';
+        if (isLoggedIn) {
+            sidebarNav.innerHTML += '<li><a href="aftertimefault.html">AfterTimeFault</a></li>';
+            sidebarNav.innerHTML += '<li><a href="calendar.html">Calendar</a></li>';
+        }
+    }
+    // Mobile sidenav
+    const mobileSidenav = document.getElementById('mySidenav');
+    if (mobileSidenav) {
+        mobileSidenav.innerHTML = '';
+        mobileSidenav.innerHTML += '<a href="index.html">Home</a>';
+        if (isLoggedIn) {
+            mobileSidenav.innerHTML += '<a href="aftertimefault.html">AfterTimeFault</a>';
+            mobileSidenav.innerHTML += '<a href="calendar.html">Calendar</a>';
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
     setActiveSidebarLink();
 
     // Remove any legacy tasks container that might still be in the DOM (safety cleanup)
     try {
         document.querySelectorAll('#tasks-container, .tasks-container').forEach(el => el.remove());
     } catch (e) { /* ignore */ }
+
+    updateNavForLogin();
 });
