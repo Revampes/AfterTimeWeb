@@ -1,0 +1,100 @@
+/* Styles for edit_question page (neon theme friendly) */
+/* Explanation: styles for topics grid, topic cards, modal dialog, form layout, previews, and MC options visibility */
+
+:root {
+    --neon-accent: #00fff6;
+    --neon-pink: #ff2d95;
+    --panel-bg: rgba(10,10,12,0.6);
+    --glass-border: rgba(255,255,255,0.06);
+}
+
+.topics-panel {
+    margin: 1rem 0 2rem;
+    padding: 1rem;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+}
+
+.topics-panel h2 { margin: 0 0 0.75rem 0; color: var(--neon-accent); }
+
+.topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+    align-items: stretch;
+}
+
+.topic-card {
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.04);
+    padding: 12px;
+    border-radius: 8px;
+    color: #e6f9f8;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:72px;
+    cursor:pointer;
+    position:relative;
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    box-shadow: 0 0 0 rgba(0,0,0,0);
+}
+
+.topic-card:hover { transform: translateY(-4px); box-shadow: 0 6px 24px rgba(0,0,0,0.6); }
+
+.topic-card .topic-label { font-weight:600; }
+
+.topic-card.selected {
+    border-color: var(--neon-accent);
+    box-shadow: 0 0 18px rgba(0,255,246,0.12), 0 0 6px rgba(0,255,246,0.06) inset;
+}
+
+/* Active topic (the one open in the Questions panel) */
+.topic-card.active {
+    border-color: var(--neon-pink);
+    box-shadow: 0 8px 30px rgba(255,45,149,0.12), 0 0 10px rgba(255,45,149,0.06) inset;
+    transform: translateY(-6px);
+}
+
+/* Modal */
+.modal { position: fixed; inset: 0; display:flex; align-items:center; justify-content:center; z-index:1200; }
+.modal.hidden { display:none; }
+.modal-backdrop { position:absolute; inset:0; background: linear-gradient(180deg, rgba(2,6,10,0.7), rgba(0,0,0,0.6)); }
+.modal-dialog { position:relative; z-index:5; width: min(980px, 96vw); max-height: 88vh; overflow:auto; border-radius:10px; background: linear-gradient(180deg, rgba(8,8,10,0.9), rgba(6,6,8,0.85)); border:1px solid rgba(255,255,255,0.04); padding: 1rem; }
+.modal-close { position:absolute; right:8px; top:8px; background:transparent; color:#fff; border:0; font-size:20px; cursor:pointer; }
+.modal-body h3 { margin-top:0; color: var(--neon-pink); }
+
+.form-row { display:flex; gap:12px; margin-bottom:12px; }
+.form-row label { flex:1; display:flex; flex-direction:column; color:#dff; font-size:14px; }
+.form-row input[type="text"], .form-row input[type="number"], .form-row select, .form-row textarea { margin-top:6px; padding:8px 10px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04); color:#eaf; border-radius:6px; }
+
+fieldset#mc-options { margin:12px 0; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background: linear-gradient(180deg, rgba(10,6,12,0.45), rgba(6,6,8,0.35)); }
+.mc-row { display:flex; gap:8px; align-items:center; margin-bottom:8px; }
+.mc-row label { display:flex; gap:8px; align-items:center; }
+.mc-text { width:280px; }
+.mc-value { width:80px; }
+
+.img-preview { display:block; margin-top:8px; max-width:180px; max-height:120px; border-radius:6px; border:1px solid rgba(255,255,255,0.06); }
+
+.form-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+
+/* small helper for inline small previews after MC file inputs */
+.small-preview { width:64px; height:48px; object-fit:contain; border-radius:6px; border:1px solid rgba(255,255,255,0.04); margin-left:6px; }
+
+/* Questions list item */
+.question-item {
+    background: rgba(255,255,255,0.02);
+    border:1px solid rgba(255,255,255,0.03);
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:8px;
+    cursor:pointer;
+}
+.question-item:focus, .question-item:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.45); }
+
+/* responsive tweaks */
+@media (max-width:720px) {
+    .form-row { flex-direction:column; }
+    .mc-text { width:100%; }
+}

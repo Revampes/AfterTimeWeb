@@ -1,3 +1,72 @@
+.login-card {
+    background: var(--panel-bg);
+    padding: 36px 32px 28px 32px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 0 0 2px var(--neon-accent-2);
+    min-width: 320px;
+    max-width: 90vw;
+}
 
+.login-card h2 {
+    margin-top: 0;
+    color: var(--neon-accent-2):
+    text-align: center;
+}
 
+.username-container {
+    margin-bottom: 18px;
+}
 
+.username-container label {
+    color: var(--neon-accent-2);
+    font-size: 14px;
+}
+
+.username-container input {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 4px;
+    border-radius: 8px;
+    border: 1px solid var(--gradient-end);
+    background: var(--dark-bg);
+    color: var(--text-primary);
+}
+
+.password-container {
+    margin-bottom: 18px;
+}
+
+.password-container label {
+    color: var(--neon-accent-2);
+    font-size: 14px;
+}
+
+.password-container input {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 4px;
+    border-radius: 8px;
+    border: 1px solid var(--gradient-end);
+    background: var(--dark-bg);
+    color: var(--text-primary);
+}
+
+.login-error {
+    color: #ff7de9;
+    font-size: 13px;
+    min-height: 18px;
+    margin-bottom: 10px;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 12px 0;
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--neon-accent-2), var(--neon-accent));
+    color: #181828;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    box-shadow: 0 2px 12px rgba(0, 230, 255, 0.12);
+    cursor: pointer;
+}

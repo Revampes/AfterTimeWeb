@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/components/sidebar.css">
     <link rel="stylesheet" href="assets/css/components/header.css">
+    <!-- page specific styles -->
+    <link rel="stylesheet" href="assets/css/edit_question.css">
 </head>
 <body class="theme-neon">
 <header class="main-header">
@@ -27,13 +29,160 @@
     <h1>Edit Question</h1>
     <p>This page is accessible to admins and teachers only.</p>
     <div id="editor-area">
-        <p>Placeholder editor — implement question editing here.</p>
+        <div class="editor-header">
+            <button id="open-add-btn" class="btn primary">+ Add New Question</button>
+        </div>
+
+        <section class="topics-panel">
+            <h2>Topics</h2>
+            <div id="topics-grid" class="topics-grid" role="list" aria-label="Topics list">
+                <!-- topic cards rendered by JS: 14 cards (Topic 1-12, Elective 1, Elective 3) -->
+            </div>
+        </section>
+
+        <section class="questions-panel">
+            <h2 id="questions-title">Questions</h2>
+            <div id="questions-list" class="questions-list">
+                <p class="muted">Select a topic to view its questions. Click a question to open it for editing.</p>
+            </div>
+        </section>
+
+        <!-- Add / Edit Question Modal -->
+        <div id="add-modal" class="modal hidden" aria-hidden="true" role="dialog" aria-modal="true">
+            <div class="modal-backdrop" data-close></div>
+            <div class="modal-dialog">
+                <button class="modal-close" data-close aria-label="Close">×</button>
+                <div class="modal-body">
+                    <h3 id="modal-title">Add New Question</h3>
+                    <form id="question-form">
+                        <div class="form-row">
+                            <label>Source
+                                <select id="q-source" name="source">
+                                    <option value="DSE">DSE</option>
+                                    <option value="A-Level">A-Level</option>
+                                    <option value="CE">CE</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                            </label>
+                            <label>Year
+                                <input id="q-year" name="year" type="text" placeholder="e.g. 2024">
+                            </label>
+                        </div>
+
+                        <div class="form-row">
+                            <label>Question Number
+                                <input id="q-number" name="number" type="text" placeholder="e.g. 3">
+                            </label>
+                            <label>Sub-question
+                                <input id="q-sub" name="sub" type="text" placeholder="e.g. (a)(i)">
+                            </label>
+                        </div>
+
+                        <div class="form-row">
+                            <label>Type
+                                <select id="q-type" name="type">
+                                    <option value="mc">Multiple choice</option>
+                                    <option value="long">Long question</option>
+                                    <option value="essay">Essay</option>
+                                    <option value="sketch">Sketching/drawing</option>
+                                </select>
+                            </label>
+                            <label>Topic
+                                <select id="q-topic-select" name="topic">
+                                    <option value="">(choose a topic)</option>
+                                    <option value="Planet Earth">Planet Earth</option>
+                                    <option value="Microscopic World I">Microscopic World I</option>
+                                    <option value="Metals">Metals</option>
+                                    <option value="Acids and Bases">Acids and Bases</option>
+                                    <option value="Fossil fuels and Carbon Compounds">Fossil fuels and Carbon Compounds</option>
+                                    <option value="Microscopic World II">Microscopic World II</option>
+                                    <option value="Redox reactions, Chemical Cells and Electrolysis">Redox reactions, Chemical Cells and Electrolysis</option>
+                                    <option value="Chemical Reactions and Energy">Chemical Reactions and Energy</option>
+                                    <option value="Rate of Reaction">Rate of Reaction</option>
+                                    <option value="Chemical Equilibrium">Chemical Equilibrium</option>
+                                    <option value="Chemistry of Carbon Compounds">Chemistry of Carbon Compounds</option>
+                                    <option value="Patterns in the Chemical World">Patterns in the Chemical World</option>
+                                    <option value="Elective 1: Industrial Chemistry">Elective 1: Industrial Chemistry</option>
+                                    <option value="Elective 3: Analytical Chemistry">Elective 3: Analytical Chemistry</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="form-row">
+                            <label>Question Text
+                                <textarea id="q-text" name="text" rows="4" placeholder="Type the question text here"></textarea>
+                            </label>
+                            <label>Question Image
+                                <input id="q-image" name="image" type="file" accept="image/*">
+                                <img id="q-image-preview" class="img-preview hidden" src="" alt="Question preview">
+                            </label>
+                        </div>
+
+                        <fieldset id="mc-options">
+                            <legend>Multiple choice options</legend>
+                            <div class="mc-row">
+                                <label>A
+                                    <input type="text" class="mc-text" name="optA" placeholder="Option A">
+                                    <input type="file" class="mc-file" name="optA_img" accept="image/*">
+                                </label>
+                                <label><input type="radio" name="correct" value="A"> Correct</label>
+                                <label>Value <input type="number" class="mc-value" name="valA" value="1" min="0"></label>
+                            </div>
+                            <div class="mc-row">
+                                <label>B
+                                    <input type="text" class="mc-text" name="optB" placeholder="Option B">
+                                    <input type="file" class="mc-file" name="optB_img" accept="image/*">
+                                </label>
+                                <label><input type="radio" name="correct" value="B"> Correct</label>
+                                <label>Value <input type="number" class="mc-value" name="valB" value="0" min="0"></label>
+                            </div>
+                            <div class="mc-row">
+                                <label>C
+                                    <input type="text" class="mc-text" name="optC" placeholder="Option C">
+                                    <input type="file" class="mc-file" name="optC_img" accept="image/*">
+                                </label>
+                                <label><input type="radio" name="correct" value="C"> Correct</label>
+                                <label>Value <input type="number" class="mc-value" name="valC" value="0" min="0"></label>
+                            </div>
+                            <div class="mc-row">
+                                <label>D
+                                    <input type="text" class="mc-text" name="optD" placeholder="Option D">
+                                    <input type="file" class="mc-file" name="optD_img" accept="image/*">
+                                </label>
+                                <label><input type="radio" name="correct" value="D"> Correct</label>
+                                <label>Value <input type="number" class="mc-value" name="valD" value="0" min="0"></label>
+                            </div>
+                        </fieldset>
+
+                        <div class="form-row">
+                            <label>Answer Text
+                                <textarea id="answer-text" name="answer" rows="3" placeholder="Answer text or explanation"></textarea>
+                            </label>
+                            <label>Answer Image
+                                <input id="answer-image" name="answer_image" type="file" accept="image/*">
+                                <img id="answer-image-preview" class="img-preview hidden" src="" alt="Answer preview">
+                            </label>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn primary">Save Question</button>
+                            <button type="button" class="btn" data-close>Cancel</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
 </main>
+
 <footer><p>&copy; 2025 AfterTime</p></footer>
 <script src="assets/js/main.js"></script>
 <script src="assets/js/sidebar.js"></script>
 <script src="assets/js/auth.js"></script>
+<script src="assets/js/pages/edit_question.js"></script>
+
 <script>
     // Access guard: allow admin and teacher only
     (function(){
@@ -49,4 +198,3 @@
 </script>
 </body>
 </html>
-

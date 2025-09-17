@@ -40,10 +40,34 @@ document.addEventListener('DOMContentLoaded', () => {
       { id: 'leap-announce', title: 'Leap Announce', content: `<p>Announces leap target in party chat.</p>` },
       { id: 'mob-highlighter', title: 'Mob Highlight', content: `<p>ESP highlight for starred mobs.</p><div class="image-wrapper"><img src="assets/images/photos/Dungeon/starmobhighlight.png" alt="Star Mob Highlight"></div>` },
       { id: 'invincible-timer', title: 'Invincible Timer', content: `<p>Bonzo / spirit / phoenix invincibility timers.</p>` },
-      { id: 'ghost-block', title: 'Floor7 Pre Ghost Block', content: `<p>Generates ghost blocks for F7 routing.</p><div class="notice-label"><p>Warning: Use at your own risk!</p><p>Will evolve with DungeonBreaker release.</p></div><div class="image-wrapper"><img src="assets/images/photos/Dungeon/f7p1.png" alt="F7"></div>` },
+      { id: 'ghost-block', title: 'Floor7 Pre Ghost Block', content: `<p>Generates ghost blocks for F7 routing.</p><div class="notice-label"><p>Warning: Use at your own risk!</p><p>Will evolve with DungeonBreaker release.</p>
+        </div><div class="image-wrapper">
+            <img src="assets/images/photos/Dungeon/f7p1.png" alt="F7">
+            <img src="assets/images/photos/Dungeon/f7p2.png" alt="F7">
+            <img src="assets/images/photos/Dungeon/f7p3.1.png" alt="F7">
+            <img src="assets/images/photos/Dungeon/f7p3.2.1.png" alt="F7">
+            <img src="assets/images/photos/Dungeon/f7p3.2.2.png" alt="F7">
+            <img src="assets/images/photos/Dungeon/f7core.png" alt="F7">
+            <img src="assets/images/photos/Dungeon/f7gold.png" alt="F7">
+            <img src="assets/images/photos/Dungeon/f7eep5.png" alt="F7">
+        </div>` },
       { id: 'key-highlight', title: 'Wither/Blood Key Highlight', content: `<p>ESP highlight for keys.</p><div class="image-wrapper"><img src="assets/images/photos/Dungeon/witherkeyhighlight.png" alt="Wither Key"><img src="assets/images/photos/Dungeon/bloodkeyhighlight.png" alt="Blood Key"></div>` },
       { id: 'secret-click-highlight', title: 'Secret Click Highlight', content: `<p>Color hitbox for clicked secret (chest/lever/button).</p>` },
-      { id: 'custom-terminals-ui', title: 'Custom Terminals UI', content: `<p>Large, minimal terminals UI.</p><div class="image-wrapper"><h3>Colors</h3><img src="assets/images/photos/Dungeon/colors.png" alt="Colors Terminal"></div>` },
+      { id: 'custom-terminals-ui', title: 'Custom Terminals UI', content: `<p>Large, minimal terminals UI.
+      </p><div class="image-wrapper">
+        <h3>Colors</h3>
+        <img src="assets/images/photos/Dungeon/colors.png" alt="Colors Terminal">
+        <h3>Melody</h3>
+        <img src="assets/images/photos/Dungeon/melody.png" alt="Melody Terminal">
+        <h3>Numbers</h3>
+        <img src="assets/images/photos/Dungeon/numbers.png" alt="Numbers Terminal">
+        <h3>Red green</h3>
+        <img src="assets/images/photos/Dungeon/redgreen.png" alt="Red green Terminal">
+        <h3>Rubix</h3>
+        <img src="assets/images/photos/Dungeon/rubix.png" alt="Rubix Terminal">
+        <h3>Starts with</h3>
+        <img src="assets/images/photos/Dungeon/startswith.png" alt="Starts with Terminal">
+      </div>` },
       { id: 'watcher-timer', title: 'Watcher Timer', content: `<p>Helps mage timing for blood clear.</p>` },
       { id: 'p3-tick-timer', title: 'Phase Three Tick Timer', content: `<p>Instant death early entry timer.</p>` }
     ]},

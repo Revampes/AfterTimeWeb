@@ -47,19 +47,19 @@
     </div>
     <!-- Main Content -->
     <main style="align-items: center; justify-content: center; display: flex;">
-        <div class="login-card" style="background:var(--panel-bg);padding:36px 32px 28px 32px;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.35),0 0 0 2px var(--neon-accent-2);min-width:320px;max-width:90vw;">
-            <h2 style="margin-top:0;color:var(--neon-accent-2);text-align:center;">Sign In</h2>
+        <div class="login-card">
+            <h2>Sign In</h2>
             <form id="loginForm" autocomplete="off">
-                <div style="margin-bottom:18px;">
-                    <label for="username" style="color:var(--neon-accent-2);font-size:14px;">Username</label>
-                    <input type="text" id="username" name="username" class="login-input" required autofocus style="width:100%;padding:10px 12px;margin-top:4px;border-radius:8px;border:1px solid var(--gradient-end);background:var(--dark-bg);color:var(--text-primary);">
+                <div class="username-container" style="margin-bottom:18px;">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" class="login-input" required autofocus>
                 </div>
-                <div style="margin-bottom:18px;">
-                    <label for="password" style="color:var(--neon-accent-2);font-size:14px;">Password</label>
-                    <input type="password" id="password" name="password" class="login-input" required style="width:100%;padding:10px 12px;margin-top:4px;border-radius:8px;border:1px solid var(--gradient-end);background:var(--dark-bg);color:var(--text-primary);">
+                <div class="password-container">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="login-input" required>
                 </div>
-                <div id="loginError" style="color:#ff7de9;font-size:13px;min-height:18px;margin-bottom:10px;"></div>
-                <button type="submit" class="login-btn" style="width:100%;padding:12px 0;border-radius:8px;background:linear-gradient(90deg,var(--neon-accent-2),var(--neon-accent));color:#181828;font-weight:700;font-size:16px;border:none;box-shadow:0 2px 12px rgba(0,230,255,0.12);cursor:pointer;">Login</button>
+                <div class="login-error" id="loginError"></div>
+                <button type="submit" class="login-btn">Login</button>
                 <div style="margin-top:16px;text-align:center;color:var(--text-dim);font-size:13px;">Use <b>username: 1</b> & <b>password: 1</b></div>
             </form>
         </div>
